@@ -1,4 +1,7 @@
-package ru.vsu.cs.kg2021.lazutkina_a_a.task3;
+package ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes;
+
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.RealPoint;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.ScreenPoint;
 
 public class Line
 {

@@ -15,12 +15,32 @@ public class ScreenConverter
         this.screenHeight = screenHeight;
     }
 
+    public void moveCorner(RealPoint delta)
+    {
+        cx += delta.getX();
+        cy += delta.getY();
+    }
+
+    public void changeScale(double scale)
+    {
+        realWidth *= scale;
+        realHeight *= scale;
+    }
+
     public ScreenPoint realToScreen(RealPoint point)
     {
         double x = (point.getX() - cx) / realWidth * screenWidth;
         double y = (cy - point.getY()) / realHeight * screenHeight;
         return new ScreenPoint((int)x, (int)y);
     }
+
+    public RealPoint screenToReal(ScreenPoint p)
+    {
+        double x = cx + p.getColumn() * realWidth / screenWidth;
+        double y = cy - p.getRow() * realHeight / screenHeight;
+        return new RealPoint(x, y);
+    }
+
 
     public double getCx()
     {

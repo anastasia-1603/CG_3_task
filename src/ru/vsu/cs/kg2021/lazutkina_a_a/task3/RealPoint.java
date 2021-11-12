@@ -11,6 +11,11 @@ public class RealPoint
         this.y = y;
     }
 
+    public RealPoint minus(RealPoint p)
+    {
+        return new RealPoint(getX() - p.getX(), getY() - p.getY());
+    }
+
     public double getX()
     {
         return x;
