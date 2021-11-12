@@ -13,30 +13,33 @@ import java.util.List;
 
 public class DrawPanel extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener
 {
-    private static final Data DATA = new Data();
+    private static final int MIN = 0;
+    public static final int MAX = 200;
+    private static final Data DATA = new Data(MIN, MAX);
     private static final DrawService DRAW_SERVICE = new DrawService();
     public static final DataService DATA_SERVICE = new DataService();
 
     private ScreenConverter sc;
     private CoordinatePlane coordinatePlane;
-    private Data currData;
+    private int[][] currData;
 
     public DrawPanel()
     {
-        
-        sc = new ScreenConverter(-0.02, 1, 30, 130, this.getWidth(), this.getHeight());
-        coordinatePlane = new CoordinatePlane(30, 130, sc);
+        this.currData = DATA_SERVICE.getMonthData(DATA);
+        sc = new ScreenConverter(-0.02, 0, currData.length + 1, MAX,
+                this.getWidth(), this.getHeight());
+        coordinatePlane = new CoordinatePlane(sc);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
     }
 
-    public Data getCurrData()
+    public int[][] getCurrData()
     {
         return currData;
     }
 
-    public void setCurrData(Data currData)
+    public void setCurrData(int[][] currData)
     {
         this.currData = currData;
     }
@@ -53,8 +56,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         g.setColor(Color.BLACK);
         g.setStroke(new BasicStroke(2));
         coordinatePlane.draw(g);
-        int[][] data = DATA_SERVICE.getMonthData(DATA);
-        drawDiagram(data, g);
+        drawDiagram(currData, g);
         origG.drawImage(bi, 0, 0, null);
         g.dispose();
     }

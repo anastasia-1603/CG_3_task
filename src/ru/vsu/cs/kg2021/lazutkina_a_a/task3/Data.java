@@ -1,29 +1,28 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3;
 
-import java.util.Arrays;
 import java.util.Random;
 
 public class Data
 {
-    private final int[][] allData = new int[360][4];
+    private final int[][] data = new int[360][4];
 
-    public Data()
+    public Data(int min, int max)
     {
-        fillRandom(allData);
+        fillRandom(data, min, max);
     }
 
-    public int[][] getAllData()
+    public int[][] getData()
     {
-        return allData;
+        return data;
     }
 
-    private void fillRandom(int[][] array)
+    private void fillRandom(int[][] array, int min, int max)
     {
         for (int i = 0; i < array.length; i++)
         {
             for (int j = 0; j < array[0].length; j++)
             {
-                array[i][j] = random(0, 130);
+                array[i][j] = random(min, max);
             }
         }
     }

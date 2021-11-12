@@ -16,28 +16,18 @@ public class CoordinatePlane implements Drawable
     private final DrawService DS = new DrawService();
     private ScreenConverter sc;
 
-    public CoordinatePlane(Line axisX, Line axisY, ScreenConverter sc)
+    public CoordinatePlane(ScreenConverter sc)
     {
         this.sc = sc;
-        int xZero = (int)(sc.getRealWidth());
-        int yZero = (int)(sc.getRealHeight());
-        this.axisX = new Line(new RealPoint(xZero, yZero), new RealPoint(1, 0));
-        this.axisY = new Line(new RealPoint(xZero, yZero), new RealPoint(0, 1));
-    }
-
-    public CoordinatePlane(int xMax, int yMax, ScreenConverter sc)
-    {
-        this.sc = sc;
-        int xZero = (int)(sc.getRealWidth());
-        int yZero = -2*(int)(sc.getRealHeight());
+        this.xMax = (int) sc.getRealWidth();
+        this.yMax = (int) sc.getRealHeight();
+        int yZero = (int)(sc.getCy() - sc.getRealHeight());
         this.axisX = new Line(
-                new RealPoint(0, yZero),
+                new RealPoint(sc.getCx(), yZero),
                 new RealPoint(sc.getRealWidth(), yZero));
         this.axisY = new Line(
-                new RealPoint(0, yZero),
-                new RealPoint(0, 0));
-        this.xMax = xMax;
-        this.yMax = yMax;
+                new RealPoint(sc.getCx(), yZero),
+                new RealPoint(0, sc.getRealHeight()));
     }
 
     @Override
@@ -49,10 +39,7 @@ public class CoordinatePlane implements Drawable
 
     private void drawAxisY(Graphics2D g, int numberUnits)
     {
-       /* g.drawLine(axisY.getsPoint1().getColumn(),axisY.getsPoint1().getRow(),
-                axisY.getsPoint1().getColumn(), axisY.getsPoint2().getRow());*/
-        DS.drawLine(g, sc, axisY);
-        //numberUnits = (int) axisY.getPoint2().getY();
+        DS.drawLine(g, sc, axisY) ;
         double startY = axisY.getPoint1().getY();
         double finalY = axisX.getPoint2().getX();
         double interval = (finalY - startY) / numberUnits; // периодичность и ...?
