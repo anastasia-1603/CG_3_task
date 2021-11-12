@@ -29,7 +29,7 @@ public class Candlestick
         {
             type = CandleType.INCREASING;
             up = close;
-            bottom = up;
+            bottom = open;
         }
         else
         {
@@ -57,36 +57,6 @@ public class Candlestick
     {
         this.width = width;
     }
-    /*
-    @Override
-    public void draw(Graphics2D g)
-    {
-        Color oldColor = g.getColor();
-        drawUpperShadow(g);
-        g.setColor(type.color);
-        drawRealBody(g);
-        g.setColor(oldColor);
-        drawLowerShadow(g);
-    }
-
-    private final DrawService DS = new DrawService();
-    private void drawUpperShadow(Graphics2D g)
-    {
-        Line upperShadow = new Line(new RealPoint(time, high), new RealPoint(time, up));
-        DS.drawLine(g, sc, upperShadow);
-    }
-
-    private void drawRealBody(Graphics2D g)
-    {
-        Rectangle rectangle = new Rectangle(new RealPoint(time - interval/2.0, up),
-                new RealPoint(time + interval/2.0, bottom));
-        DS.drawRect(g,sc, rectangle);
-    }
-
-    private void drawLowerShadow(Graphics2D g)
-    {
-        DS.drawLine(g, sc, new Line(new RealPoint(time, bottom), new RealPoint(time, low)));
-    }*/
 
     public int getHigh()
     {

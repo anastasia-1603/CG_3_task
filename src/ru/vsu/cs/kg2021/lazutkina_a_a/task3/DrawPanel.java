@@ -26,9 +26,9 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     public DrawPanel()
     {
         this.currData = DATA_SERVICE.getMonthData(DATA);
-        sc = new ScreenConverter(-0.02, 0, currData.length + 1, MAX,
+        sc = new ScreenConverter(0, MAX, currData.length + 1, MAX,
                 this.getWidth(), this.getHeight());
-        coordinatePlane = new CoordinatePlane(sc);
+        coordinatePlane = new CoordinatePlane(sc, MAX, currData.length + 1);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
@@ -108,7 +108,16 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     @Override
     public void mouseClicked(MouseEvent e)
     {
-        //System.out.println(sc.getCx() + " " + sc.getCy());
+        if (e.getClickCount() == 2 && !e.isConsumed() && SwingUtilities.isLeftMouseButton(e)) {
+            e.consume();
+            sc.setCx(0);
+            sc.setCy(MAX);
+            sc.setRealWidth(currData.length + 1);
+            sc.setRealHeight(MAX);
+            sc.setScreenWidth(this.getWidth());
+            sc.setScreenHeight(this.getHeight());
+            repaint();
+        }
     }
 
     private ScreenPoint prevPoint = null;

@@ -58,4 +58,10 @@ public class DrawService implements LineDrawer
         }
         drawLine(g, sc, lowerShadow);
     }
+
+    public void drawString(Graphics2D gr, ScreenConverter sc, String text, RealPoint realPoint)
+    {
+        ScreenPoint point = sc.realToScreen(realPoint);
+        gr.drawString(text, point.getColumn(), point.getRow());
+    }
 }
