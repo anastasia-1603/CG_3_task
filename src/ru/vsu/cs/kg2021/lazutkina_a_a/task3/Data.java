@@ -1,14 +1,18 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3;
 
-import java.util.Random;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DataService;
+
+import static java.util.Arrays.copyOfRange;
+
 
 public class Data
 {
     private final int[][] data = new int[360][4];
+    private final DataService DATA_SERVICE = new DataService();
 
     public Data(int min, int max)
     {
-        fillRandom(data, min, max);
+        DATA_SERVICE.fillData(data, min, max);
     }
 
     public int[][] getData()
@@ -16,20 +20,14 @@ public class Data
         return data;
     }
 
-    private void fillRandom(int[][] array, int min, int max)
+    public int[][] getMonthData()
     {
-        for (int i = 0; i < array.length; i++)
-        {
-            for (int j = 0; j < array[0].length; j++)
-            {
-                array[i][j] = random(min, max);
-            }
-        }
+        return copyOfRange(data, 330, 360);
     }
 
-    private int random(int min, int max)
+    public int[][] getWeekData()
     {
-        Random rnd = new Random();
-        return rnd.nextInt(max - min + 1) + min;
+        return copyOfRange(data, 353, 360);
     }
+
 }

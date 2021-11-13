@@ -1,6 +1,5 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3;
 
-import ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram.Candlestick;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DataService;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DrawService;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Line;
@@ -13,11 +12,15 @@ import java.util.List;
 
 public class DrawPanel extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener
 {
-    private static final int MIN = 0;
-    public static final int MAX = 200;
-    private static final Data DATA = new Data(MIN, MAX);
+    private static final int MIN_VALUE = 0;
+    private static final int MAX_VALUE = 200;
+    private static final Data DATA = new Data(MIN_VALUE, MAX_VALUE);
     private static final DrawService DRAW_SERVICE = new DrawService();
-    public static final DataService DATA_SERVICE = new DataService();
+    private static final DataService DATA_SERVICE = new DataService();
+
+    public static final int[][] WEEK_DATA = DATA.getWeekData();
+    public static final int[][] MONTH_DATA = DATA.getMonthData();
+    public static final int[][] YEAR_DATA = DATA.getData();
 
     private ScreenConverter sc;
     private CoordinatePlane coordinatePlane;
@@ -25,10 +28,10 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 
     public DrawPanel()
     {
-        this.currData = DATA_SERVICE.getMonthData(DATA);
-        sc = new ScreenConverter(0, MAX, currData.length + 1, MAX,
+        this.currData = DATA.getMonthData();
+        sc = new ScreenConverter(0, MAX_VALUE, currData.length + 1, MAX_VALUE,
                 this.getWidth(), this.getHeight());
-        coordinatePlane = new CoordinatePlane(sc, MAX, currData.length + 1);
+        coordinatePlane = new CoordinatePlane(sc, MAX_VALUE, currData.length + 1);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
@@ -42,6 +45,12 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     public void setCurrData(int[][] currData)
     {
         this.currData = currData;
+        repaint();
+    }
+
+    public void setDataForWeek()
+    {
+        setCurrData(DATA_SERVICE.selectDataForWeek(currData));
     }
 
     @Override
@@ -56,22 +65,10 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         g.setColor(Color.BLACK);
         g.setStroke(new BasicStroke(2));
         coordinatePlane.draw(g);
-        drawDiagram(currData, g);
+
+        DRAW_SERVICE.drawDiagram(currData, sc, g);
         origG.drawImage(bi, 0, 0, null);
         g.dispose();
-    }
-
-
-    private void drawDiagram(int[][] data, Graphics2D g) // num весь промежуток
-    {
-        int num = data.length;
-
-        for (int i = 0; i < num; i++)
-        {
-            Candlestick candlestick = new Candlestick(data[i][0], data[i][1],
-                    data[i][2], data[i][3], i+1, 1, sc);
-            DRAW_SERVICE.drawCandle(g, sc, candlestick);
-        }
     }
 
     private static boolean closeToLine(ScreenConverter sc, Line l, ScreenPoint p, int eps)
@@ -104,16 +101,15 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         
     }
 
-
     @Override
     public void mouseClicked(MouseEvent e)
     {
         if (e.getClickCount() == 2 && !e.isConsumed() && SwingUtilities.isLeftMouseButton(e)) {
             e.consume();
             sc.setCx(0);
-            sc.setCy(MAX);
+            sc.setCy(MAX_VALUE);
             sc.setRealWidth(currData.length + 1);
-            sc.setRealHeight(MAX);
+            sc.setRealHeight(MAX_VALUE);
             sc.setScreenWidth(this.getWidth());
             sc.setScreenHeight(this.getHeight());
             repaint();
@@ -122,6 +118,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 
     private ScreenPoint prevPoint = null;
     private RealPoint p1 = null;
+
     @Override
     public void mousePressed(MouseEvent e)
     {

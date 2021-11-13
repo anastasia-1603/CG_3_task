@@ -10,8 +10,8 @@ public class CoordinatePlane implements Drawable
     private Line axisX;
     private Line axisY;
 
-    int maxY;
-    int maxX;
+    private int maxY;
+    private int maxX;
 
     private final double COF_DASH = 0.005;
     private final DrawService DS = new DrawService();
@@ -72,6 +72,50 @@ public class CoordinatePlane implements Drawable
         DS.drawLine(g, sc, dash);
     }
 
+    public void setSc(ScreenConverter sc)
+    {
+        this.sc = sc;
+    }
+
+    public Line getAxisX()
+    {
+        return axisX;
+    }
+
+    public void setAxisX(Line axisX)
+    {
+        this.axisX = axisX;
+    }
+
+    public Line getAxisY()
+    {
+        return axisY;
+    }
+
+    public void setAxisY(Line axisY)
+    {
+        this.axisY = axisY;
+    }
+
+    public int getMaxY()
+    {
+        return maxY;
+    }
+
+    public void setMaxY(int maxY)
+    {
+        this.maxY = maxY;
+    }
+
+    public int getMaxX()
+    {
+        return maxX;
+    }
+
+    public void setMaxX(int maxX)
+    {
+        this.maxX = maxX;
+    }
     /*private void drawCoordinateGrid(Graphics2D gr, ScreenConverter screenConverter, Color color) {
         gr.setColor(color);
         drawLine(gr, screenConverter, oX);

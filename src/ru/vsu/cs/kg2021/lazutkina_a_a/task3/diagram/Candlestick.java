@@ -23,7 +23,7 @@ public class Candlestick
     private CandleType type;
     private ScreenConverter sc;
 
-    public Candlestick(int open, int close, int high, int low, int time, int width, ScreenConverter sc)
+    public Candlestick(int low, int open, int close, int high, int time, int width, ScreenConverter sc)
     {
         if (close > open)
         {
