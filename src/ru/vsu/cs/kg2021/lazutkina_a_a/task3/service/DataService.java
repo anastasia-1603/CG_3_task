@@ -1,5 +1,6 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3.service;
 
+import org.w3c.dom.ls.LSOutput;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.Data;
 
 import java.util.Arrays;
@@ -39,13 +40,29 @@ public class DataService
         return array;
     }
 
-    public int[][] selectDataForWeek(int[][] data)
+    public int[][] selectDataByWeek(int[][] data)
     {
         int num = data.length / 7;
         int[][] newData = new int[num][4];
         for (int j = 0, i = 0; i < num * 7; i += 7)
         {
             int[][] slice = copyOfRange(data, i, i + 7);
+            newData[j][0] = findMin(slice);
+            newData[j][1] = slice[0][1];
+            newData[j][2] = slice[slice.length-1][2];
+            newData[j][3] = findMax(slice);
+            j++;
+        }
+        return newData;
+    }
+
+    public int[][] selectDataByMonth(int[][] data)
+    {
+        int num = data.length / 30;
+        int[][] newData = new int[num][4];
+        for (int j = 0, i = 0; i < num * 30; i += 30)
+        {
+            int[][] slice = copyOfRange(data, i, i + 30);
             newData[j][0] = findMin(slice);
             newData[j][1] = slice[0][1];
             newData[j][2] = slice[slice.length-1][2];
@@ -72,11 +89,11 @@ public class DataService
     private int findMax(int[] array)
     {
         int max = 0;
-        for (int i = 0; i < array.length; i++)
+        for (int j : array)
         {
-            if (array[i] > max)
+            if (j > max)
             {
-                max = array[i];
+                max = j;
             }
         }
         return max;
@@ -99,11 +116,11 @@ public class DataService
     private int findMin(int[] array)
     {
         int min = array[0];
-        for (int i = 0; i < array.length; i++)
+        for (int j : array)
         {
-            if (array[i] < min)
+            if (j < min)
             {
-                min = array[i];
+                min = j;
             }
         }
         return min;

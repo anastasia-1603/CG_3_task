@@ -1,5 +1,8 @@
-package ru.vsu.cs.kg2021.lazutkina_a_a.task3;
+package ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram;
 
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.Drawable;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.RealPoint;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.ScreenConverter;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DrawService;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Line;
 

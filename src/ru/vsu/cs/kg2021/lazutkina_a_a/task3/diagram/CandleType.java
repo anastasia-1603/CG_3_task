@@ -9,7 +9,7 @@ public enum CandleType
 
     public final Color color;
 
-    private CandleType(Color color)
+    CandleType(Color color)
     {
         this.color = color;
     }

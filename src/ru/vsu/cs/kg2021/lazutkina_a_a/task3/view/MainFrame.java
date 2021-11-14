@@ -1,11 +1,10 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3.view;
 
-import ru.vsu.cs.kg2021.lazutkina_a_a.task3.DrawPanel;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.view.status.Period;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.view.status.Time;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class MainFrame extends JFrame
 {
@@ -21,7 +20,6 @@ public class MainFrame extends JFrame
     private JPanel panelButtonsTime;
     private JPanel panelButtonsPeriod;
 
-
     public MainFrame() throws HeadlessException
     {
         panelMain = new JPanel();
@@ -34,6 +32,7 @@ public class MainFrame extends JFrame
         panelMain.setSize(this.getWidth(), this.getHeight());
         addComponentsToPanel();
         addListeners();
+        changeButtons();
 
         this.setTitle("Candlestick chart");
         this.add(panelMain);
@@ -56,29 +55,151 @@ public class MainFrame extends JFrame
     {
         buttonWeekPeriod.addActionListener(e ->
         {
-            drawPanel.setCurrData(DrawPanel.WEEK_DATA);
-            buttonWeek.setEnabled(false);
-            buttonMonth.setEnabled(false);
+            drawPanel.setPeriod(Period.WEEK);
+            changeButtons();
         });
 
         buttonMonthPeriod.addActionListener(e ->
         {
-            drawPanel.setCurrData(DrawPanel.MONTH_DATA);
-            buttonWeek.setEnabled(true);
-            buttonMonth.setEnabled(false);
+            drawPanel.setPeriod(Period.MONTH);
+            changeButtons();
         });
 
         buttonYearPeriod.addActionListener(e ->
         {
-            drawPanel.setCurrData(DrawPanel.YEAR_DATA);
-            buttonWeek.setEnabled(true);
-            buttonMonth.setEnabled(true);
+            drawPanel.setPeriod(Period.YEAR);
+            changeButtons();
+        });
+
+        buttonDay.addActionListener(e ->
+        {
+            drawPanel.setTime(Time.DAY);
+            changeButtons();
         });
 
         buttonWeek.addActionListener(e ->
         {
-            drawPanel.setDataForWeek();
+            drawPanel.setTime(Time.WEEK);
+            changeButtons();
         });
+
+        buttonMonth.addActionListener(e ->
+        {
+            drawPanel.setTime(Time.MONTH);
+            changeButtons();
+        });
+    }
+
+    private void changeButtons()
+    {
+        changeStatusOnSwitching();
+        changeEnabledButtons();
+        setColorPressedButtonsPeriod();
+        setColorPressedButtonsTime();
+        changeEnabledButtonsTime();
+    }
+
+    private void changeEnabledButtonsTime()
+    {
+        switch (drawPanel.getTime())
+        {
+            case DAY -> buttonDay.setEnabled(false);
+            case WEEK -> buttonWeek.setEnabled(false);
+            case MONTH -> buttonMonth.setEnabled(false);
+        }
+    }
+
+    private void changeStatusOnSwitching()
+    {
+        if ((drawPanel.getPeriod() == Period.WEEK && drawPanel.getTime() != Time.DAY) ||
+                (drawPanel.getPeriod() == Period.MONTH && drawPanel.getTime() == Time.MONTH))
+        {
+            drawPanel.setTime(Time.DAY);
+        }
+    }
+
+    private void changeEnabledButtons()
+    {
+        switch (drawPanel.getPeriod())
+        {
+            case YEAR ->
+                    {
+                        buttonDay.setEnabled(true);
+                        buttonWeek.setEnabled(true);
+                        buttonMonth.setEnabled(true);
+                        buttonWeekPeriod.setEnabled(true);
+                        buttonMonthPeriod.setEnabled(true);
+                        buttonYearPeriod.setEnabled(false);
+                    }
+            case MONTH ->
+                    {
+                        buttonDay.setEnabled(true);
+                        buttonWeek.setEnabled(true);
+                        buttonMonth.setEnabled(false);
+                        buttonWeekPeriod.setEnabled(true);
+                        buttonMonthPeriod.setEnabled(false);
+                        buttonYearPeriod.setEnabled(true);
+                    }
+            case WEEK ->
+                    {
+                        buttonDay.setEnabled(true);
+                        buttonWeek.setEnabled(false);
+                        buttonMonth.setEnabled(false);
+                        buttonWeekPeriod.setEnabled(false);
+                        buttonMonthPeriod.setEnabled(true);
+                        buttonYearPeriod.setEnabled(true);
+                    }
+        }
+    }
+
+    private void setColorPressedButtonsPeriod()
+    {
+        switch (drawPanel.getPeriod())
+        {
+            case WEEK ->
+                    {
+                        buttonWeekPeriod.setBackground(Color.BLUE);
+                        buttonMonthPeriod.setBackground(null);
+                        buttonYearPeriod.setBackground(null);
+                    }
+            case MONTH ->
+                    {
+                        buttonWeekPeriod.setBackground(null);
+                        buttonMonthPeriod.setBackground(Color.BLUE);
+                        buttonYearPeriod.setBackground(null);
+                    }
+            case YEAR ->
+                    {
+                        buttonWeekPeriod.setBackground(null);
+                        buttonMonthPeriod.setBackground(null);
+                        buttonYearPeriod.setBackground(Color.BLUE);
+                    }
+        }
+    }
+
+    private void setColorPressedButtonsTime()
+    {
+        switch (drawPanel.getTime())
+        {
+            case DAY ->
+                    {
+                        buttonDay.setBackground(Color.BLUE);
+                        buttonWeek.setBackground(null);
+                        buttonMonth.setBackground(null);
+                    }
+            case WEEK ->
+                    {
+                        buttonDay.setBackground(null);
+                        buttonWeek.setBackground(Color.BLUE);
+                        buttonMonth.setBackground(null);
+                    }
+            case MONTH ->
+                    {
+                        buttonDay.setBackground(null);
+                        buttonWeek.setBackground(null);
+                        buttonMonth.setBackground(Color.BLUE);
+                    }
+        }
     }
 
     private void initPanelButtonsTime()

@@ -1,8 +1,12 @@
-package ru.vsu.cs.kg2021.lazutkina_a_a.task3;
+package ru.vsu.cs.kg2021.lazutkina_a_a.task3.view;
 
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.*;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram.CoordinatePlane;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DataService;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DrawService;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Line;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.view.status.Period;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.view.status.Time;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,13 +26,16 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     public static final int[][] MONTH_DATA = DATA.getMonthData();
     public static final int[][] YEAR_DATA = DATA.getData();
 
+    private Period period;
+    private Time time;
+
     private ScreenConverter sc;
     private CoordinatePlane coordinatePlane;
     private int[][] currData;
 
     public DrawPanel()
     {
-        this.currData = DATA.getMonthData();
+        setDefaultView();
         sc = new ScreenConverter(0, MAX_VALUE, currData.length + 1, MAX_VALUE,
                 this.getWidth(), this.getHeight());
         coordinatePlane = new CoordinatePlane(sc, MAX_VALUE, currData.length + 1);
@@ -37,20 +44,106 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         this.addMouseWheelListener(this);
     }
 
-    public int[][] getCurrData()
+    private void setDefaultView()
     {
-        return currData;
+        this.currData = MONTH_DATA;
+        period = Period.MONTH;
+        time = Time.DAY;
+    }
+
+/*    private void setStatus()
+    {
+        if (currData == WEEK_DATA)
+        {
+            period = Period.WEEK;
+        }
+        else if (currData == MONTH_DATA)
+        {
+            period = Period.MONTH;
+        }
+        else if (currData == YEAR_DATA)
+        {
+            period = Period.YEAR;
+        }
+        repaint();
+    }*/
+
+    public Period getPeriod()
+    {
+        return period;
+    }
+
+    public void setPeriod(Period period)
+    {
+        this.period = period;
+    }
+
+    public Time getTime()
+    {
+        return time;
+    }
+
+    public void setTime(Time time)
+    {
+        this.time = time;
     }
 
     public void setCurrData(int[][] currData)
     {
         this.currData = currData;
+       // changeStatusOnSwitching();
         repaint();
     }
 
-    public void setDataForWeek()
+    public void setData()
     {
-        setCurrData(DATA_SERVICE.selectDataForWeek(currData));
+       switch (time)
+       {
+           case DAY -> setDataByDay();
+           case WEEK -> setDataByWeek();
+           case MONTH -> setDataByMonth();
+       }
+    }
+
+    public void setDataByDay()
+    {
+        time = Time.DAY;
+        switch (period)
+        {
+            case WEEK -> setCurrData(WEEK_DATA);
+            case MONTH -> setCurrData(MONTH_DATA);
+            case YEAR -> setCurrData(YEAR_DATA);
+        }
+    }
+
+    public void setDataByWeek()
+    {
+        time = Time.WEEK;
+        switch (period)
+        {
+            case MONTH -> setCurrData(DATA_SERVICE.selectDataByWeek(MONTH_DATA));
+            case YEAR -> setCurrData(DATA_SERVICE.selectDataByWeek(YEAR_DATA));
+        }
+    }
+
+    public void setDataByMonth()
+    {
+        time = Time.MONTH;
+        if (period == Period.YEAR)
+        {
+            setCurrData(DATA_SERVICE.selectDataByMonth(YEAR_DATA));
+        }
+    }
+
+    private void changeStatusOnSwitching()
+    {
+        if ((period == Period.WEEK && time != Time.DAY) ||
+                (period == Period.MONTH && time == Time.MONTH))
+        {
+            time = Time.DAY;
+        }
+
+        repaint();
     }
 
     @Override
@@ -58,6 +151,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     {
         sc.setScreenWidth(getWidth());
         sc.setScreenHeight(getHeight());
+        setData();
         BufferedImage bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g = bi.createGraphics();
         g.setColor(Color.WHITE);
@@ -65,7 +159,6 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         g.setColor(Color.BLACK);
         g.setStroke(new BasicStroke(2));
         coordinatePlane.draw(g);
-
         DRAW_SERVICE.drawDiagram(currData, sc, g);
         origG.drawImage(bi, 0, 0, null);
         g.dispose();
