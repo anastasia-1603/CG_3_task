@@ -51,22 +51,20 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         time = Time.DAY;
     }
 
-/*    private void setStatus()
+    public void changeCoordinatePlaneWidth()
     {
-        if (currData == WEEK_DATA)
+        switch (period)
         {
-            period = Period.WEEK;
+            case WEEK -> coordinatePlane.setWidth(WEEK_DATA.length + 1);
+            case MONTH -> coordinatePlane.setWidth(MONTH_DATA.length + 1);
+            case YEAR -> coordinatePlane.setWidth(YEAR_DATA.length + 1);
         }
-        else if (currData == MONTH_DATA)
+        switch (time)
         {
-            period = Period.MONTH;
+            case MONTH -> coordinatePlane.setMaxX(MONTH_DATA.length + 1);
+            case WEEK -> coordinatePlane.setMaxX(WEEK_DATA.length + 1);
         }
-        else if (currData == YEAR_DATA)
-        {
-            period = Period.YEAR;
-        }
-        repaint();
-    }*/
+    }
 
     public Period getPeriod()
     {
@@ -91,7 +89,6 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     public void setCurrData(int[][] currData)
     {
         this.currData = currData;
-       // changeStatusOnSwitching();
         repaint();
     }
 
@@ -135,22 +132,11 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         }
     }
 
-    private void changeStatusOnSwitching()
-    {
-        if ((period == Period.WEEK && time != Time.DAY) ||
-                (period == Period.MONTH && time == Time.MONTH))
-        {
-            time = Time.DAY;
-        }
-
-        repaint();
-    }
-
     @Override
     protected void paintComponent(Graphics origG)
     {
-        sc.setScreenWidth(getWidth());
-        sc.setScreenHeight(getHeight());
+        sc.setScreenWidth(this.getWidth());
+        sc.setScreenHeight(this.getHeight());
         setData();
         BufferedImage bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g = bi.createGraphics();
@@ -162,36 +148,6 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         DRAW_SERVICE.drawDiagram(currData, sc, g);
         origG.drawImage(bi, 0, 0, null);
         g.dispose();
-    }
-
-    private static boolean closeToLine(ScreenConverter sc, Line l, ScreenPoint p, int eps)
-    {
-        return distanceToLine(sc.realToScreen(l.getPoint1()), sc.realToScreen(l.getPoint2()), p) < eps;
-    }
-
-    private static Line findLine(ScreenConverter sc, List<Line> lines, ScreenPoint searchPoint, int eps)
-    {
-        for (Line l : lines)
-        {
-            if (closeToLine(sc, l, searchPoint, eps))
-            {
-                return l;
-            }
-        }
-        return null;
-    }
-
-    private static double distanceToLine(ScreenPoint lp1, ScreenPoint lp2, ScreenPoint cp)
-    {
-        double a = lp2.getRow() - lp1.getRow();
-        double b = -(lp2.getColumn() - lp1.getColumn());
-        double e = - cp.getColumn() * b + cp.getRow();
-        double f = a * lp1.getColumn() - b * lp1.getRow();
-        double y = (a * e - b * f) / (a * a + b * b);
-        double x = (a * y - e) / b;
-        return Math.sqrt((cp.getColumn() - x) * (cp.getColumn() - x)
-                + (cp.getRow() - y) * (cp.getRow() - y));
-        
     }
 
     @Override
@@ -210,7 +166,6 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     }
 
     private ScreenPoint prevPoint = null;
-    private RealPoint p1 = null;
 
     @Override
     public void mousePressed(MouseEvent e)

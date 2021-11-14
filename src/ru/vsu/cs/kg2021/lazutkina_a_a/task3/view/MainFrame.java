@@ -226,6 +226,4 @@ public class MainFrame extends JFrame
         panelMain.add(drawPanel);
         panelMain.add(panelButtonsPeriod);
     }
-
-
 }

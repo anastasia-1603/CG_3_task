@@ -71,74 +71,9 @@ public class DrawService implements LineDrawer
         }
     }
 
-   /* public void drawCoordinatePlane(CoordinatePlane coordinatePlane, Graphics2D g, ScreenConverter sc)
+    public void drawString(Graphics2D g, String text, ScreenPoint point)
     {
-        drawCoordinatePlane(g, sc, coordinatePlane.getAxisX(), coordinatePlane.getMaxX(), coordinatePlane.getMaxY(), true);
-    }*/
-
-    /*public void drawCoordinatePlane(Graphics2D g, ScreenConverter sc, CoordinatePlane cp)
-    {
-        Line axis
-        drawLine(g, sc, axis);
-        RealPoint startPoint = axis.getPoint1();
-        RealPoint finalPoint = axis.getPoint2();
-        if (vertical)
-        {
-            double interval = (finalPoint.getY() - startPoint.getY()) / yMax;
-            for (double i = startPoint.getY(); i < finalPoint.getY(); i += interval)
-            {
-                drawDash(g, sc, axis.getPoint1().getX(), startPoint.getY() + i, false);
-                drawString(g, sc, String.valueOf(i), new RealPoint(i, axis.getPoint1().getY()* 1.5));
-            }
-        }
-        else
-        {
-            double startX = startPoint.getX();
-            double finalX = finalPoint.getX();
-            double interval = (finalX - startX) / xMax;
-            for (int i = (int) startX; i < finalX; i += interval)
-            {
-                drawDash(g, sc, startX + i, startPoint.getY(), true);
-                drawString(g, sc, String.valueOf(i), new RealPoint(i, axis.getPoint1().getY()* 1.5));
-            }
-        }
-    }*/
-
-    /*  private void drawAxisY(Graphics2D g)
-    {
-        DS.drawLine(g, sc, axisY);
-        double finalY = axisY.getPoint1().getY();
-        double startY = axisY.getPoint2().getY();
-        double interval = (finalY - startY) / maxY;
-        for (double i = startY; i < finalY; i += interval)
-        {
-            drawDash(g, axisY.getPoint1().getX(), startY + i, false);
-        }
-    }
-
-    private void drawAxisX(Graphics2D g)
-    {
-        DS.drawLine(g, sc, axisX);
-        double startX = axisX.getPoint1().getX();
-        double finalX = axisX.getPoint2().getX();
-        double interval = (finalX - startX) / maxX;
-        for (int i = (int) startX; i < finalX; i += interval)
-        {
-            drawDash(g, startX + i, axisX.getPoint1().getY(), true);
-            DS.drawString(g, sc, String.valueOf(i), new RealPoint(i, axisX.getPoint1().getY()* 1.5));
-        }
-    }*/
-
-
-    private final double COF_DASH = 0.005;
-    private void drawDash(Graphics2D g, ScreenConverter sc, double x, double y, boolean vertical)
-    {
-        RealPoint p1Dash = new RealPoint(x, y);
-        RealPoint p2Dash = vertical ?
-                new RealPoint(p1Dash.getX(), y + COF_DASH * sc.getRealHeight()) :
-                new RealPoint(x + COF_DASH * sc.getRealWidth(), p1Dash.getY());
-        Line dash = new Line(p1Dash, p2Dash);
-        drawLine(g, sc, dash);
+        g.drawString(text, point.getColumn(), point.getRow());
     }
 
     public void drawString(Graphics2D gr, ScreenConverter sc, String text, RealPoint realPoint)
