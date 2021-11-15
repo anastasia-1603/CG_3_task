@@ -1,8 +1,7 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3.service;
 
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.*;
-import ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram.CandleType;
-import ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram.Candlestick;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram.*;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Line;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Rectangle;
 
@@ -69,11 +68,6 @@ public class DrawService implements LineDrawer
                     data[i][2], data[i][3], i+1, 1, sc);
             drawCandle(g, sc, candlestick);
         }
-    }
-
-    public void drawString(Graphics2D g, String text, ScreenPoint point)
-    {
-        g.drawString(text, point.getColumn(), point.getRow());
     }
 
     public void drawString(Graphics2D gr, ScreenConverter sc, String text, RealPoint realPoint)

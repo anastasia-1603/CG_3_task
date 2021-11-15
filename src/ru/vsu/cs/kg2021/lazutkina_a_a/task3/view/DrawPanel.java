@@ -4,7 +4,6 @@ import ru.vsu.cs.kg2021.lazutkina_a_a.task3.*;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram.CoordinatePlane;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DataService;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DrawService;
-import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Line;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.view.status.Period;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.view.status.Time;
 
@@ -12,7 +11,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 public class DrawPanel extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener
 {
@@ -58,11 +56,6 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
             case WEEK -> coordinatePlane.setWidth(WEEK_DATA.length + 1);
             case MONTH -> coordinatePlane.setWidth(MONTH_DATA.length + 1);
             case YEAR -> coordinatePlane.setWidth(YEAR_DATA.length + 1);
-        }
-        switch (time)
-        {
-            case MONTH -> coordinatePlane.setMaxX(MONTH_DATA.length + 1);
-            case WEEK -> coordinatePlane.setMaxX(WEEK_DATA.length + 1);
         }
     }
 

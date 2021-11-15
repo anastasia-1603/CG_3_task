@@ -1,7 +1,6 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3.service;
 
-import org.w3c.dom.ls.LSOutput;
-import ru.vsu.cs.kg2021.lazutkina_a_a.task3.Data;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.utils.ArrayUtil;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -34,7 +33,7 @@ public class DataService
         {
             for (int j = 0; j < array[0].length; j++)
             {
-                array[i][j] = random(min, max);
+                array[i][j] = ArrayUtil.random(min, max);
             }
         }
         return array;
@@ -47,10 +46,10 @@ public class DataService
         for (int j = 0, i = 0; i < num * 7; i += 7)
         {
             int[][] slice = copyOfRange(data, i, i + 7);
-            newData[j][0] = findMin(slice);
+            newData[j][0] = ArrayUtil.findMin(slice);
             newData[j][1] = slice[0][1];
             newData[j][2] = slice[slice.length-1][2];
-            newData[j][3] = findMax(slice);
+            newData[j][3] = ArrayUtil.findMax(slice);
             j++;
         }
         return newData;
@@ -63,71 +62,13 @@ public class DataService
         for (int j = 0, i = 0; i < num * 30; i += 30)
         {
             int[][] slice = copyOfRange(data, i, i + 30);
-            newData[j][0] = findMin(slice);
+            newData[j][0] = ArrayUtil.findMin(slice);
             newData[j][1] = slice[0][1];
             newData[j][2] = slice[slice.length-1][2];
-            newData[j][3] = findMax(slice);
+            newData[j][3] = ArrayUtil.findMax(slice);
             j++;
         }
         return newData;
     }
 
-    private int findMax(int[][] array)
-    {
-        int max = 0;
-        for (int[] data : array)
-        {
-            int localMax = findMax(data);
-            if (localMax > max)
-            {
-                max = localMax;
-            }
-        }
-        return max;
-    }
-
-    private int findMax(int[] array)
-    {
-        int max = 0;
-        for (int j : array)
-        {
-            if (j > max)
-            {
-                max = j;
-            }
-        }
-        return max;
-    }
-
-    private int findMin(int[][] array)
-    {
-        int min = array[0][0];
-        for (int[] data : array)
-        {
-            int localMin = findMin(data);
-            if (localMin < min)
-            {
-                min = localMin;
-            }
-        }
-        return min;
-    }
-
-    private int findMin(int[] array)
-    {
-        int min = array[0];
-        for (int j : array)
-        {
-            if (j < min)
-            {
-                min = j;
-            }
-        }
-        return min;
-    }
-
-    private int random(int min, int max)
-    {
-        return random.nextInt(max - min + 1) + min;
-    }
 }

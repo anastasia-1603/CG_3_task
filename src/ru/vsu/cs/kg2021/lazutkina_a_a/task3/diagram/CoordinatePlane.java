@@ -79,46 +79,6 @@ public class CoordinatePlane implements Drawable
         DS.drawLine(g, sc, dash);
     }
 
-    public void setSc(ScreenConverter sc)
-    {
-        this.sc = sc;
-    }
-
-    public Line getAxisX()
-    {
-        return axisX;
-    }
-
-    public void setAxisX(Line axisX)
-    {
-        this.axisX = axisX;
-    }
-
-    public Line getAxisY()
-    {
-        return axisY;
-    }
-
-    public void setAxisY(Line axisY)
-    {
-        this.axisY = axisY;
-    }
-
-    public int getMaxY()
-    {
-        return maxY;
-    }
-
-    public void setMaxY(int maxY)
-    {
-        this.maxY = maxY;
-    }
-
-    public int getMaxX()
-    {
-        return maxX;
-    }
-
     public void setMaxX(int maxX)
     {
         this.maxX = maxX;

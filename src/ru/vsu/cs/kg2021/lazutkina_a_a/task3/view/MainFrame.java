@@ -56,38 +56,44 @@ public class MainFrame extends JFrame
         buttonWeekPeriod.addActionListener(e ->
         {
             drawPanel.setPeriod(Period.WEEK);
-            changeButtons();
+            changeView();
         });
 
         buttonMonthPeriod.addActionListener(e ->
         {
             drawPanel.setPeriod(Period.MONTH);
-            changeButtons();
+            changeView();
         });
 
         buttonYearPeriod.addActionListener(e ->
         {
             drawPanel.setPeriod(Period.YEAR);
-            changeButtons();
+            changeView();
         });
 
         buttonDay.addActionListener(e ->
         {
             drawPanel.setTime(Time.DAY);
-            changeButtons();
+            changeView();
         });
 
         buttonWeek.addActionListener(e ->
         {
             drawPanel.setTime(Time.WEEK);
-            changeButtons();
+            changeView();
         });
 
         buttonMonth.addActionListener(e ->
         {
             drawPanel.setTime(Time.MONTH);
-            changeButtons();
+            changeView();
         });
+    }
+
+    private void changeView()
+    {
+        changeButtons();
+        //drawPanel.changeCoordinatePlaneWidth();
     }
 
     private void changeButtons()

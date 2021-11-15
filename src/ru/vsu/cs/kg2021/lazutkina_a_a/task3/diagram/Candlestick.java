@@ -11,8 +11,6 @@ import java.awt.*;
 
 public class Candlestick
 {
-    //private int open;
-    //private int close;
     private int high;
     private int low;
     private int time;
@@ -37,15 +35,14 @@ public class Candlestick
             up = open;
             bottom = close;
         }
-        //this.open = open;
-        //this.close = close;
+
         this.high = high;
         this.low = low;
         this.time = time;
         this.sc = sc;
         this.width = width;
 
-        //type = (close > open) ? CandleType.INCREASING : CandleType.DECREASING;
+
     }
 
     public int getWidth()
@@ -53,19 +50,9 @@ public class Candlestick
         return width;
     }
 
-    public void setWidth(int width)
-    {
-        this.width = width;
-    }
-
     public int getHigh()
     {
         return high;
-    }
-
-    public void setHigh(int high)
-    {
-        this.high = high;
     }
 
     public int getLow()
@@ -73,29 +60,14 @@ public class Candlestick
         return low;
     }
 
-    public void setLow(int low)
-    {
-        this.low = low;
-    }
-
     public int getTime()
     {
         return time;
     }
 
-    public void setTime(int time)
-    {
-        this.time = time;
-    }
-
     public int getBottom()
     {
         return bottom;
-    }
-
-    public void setBottom(int bottom)
-    {
-        this.bottom = bottom;
     }
 
     public int getUp()
