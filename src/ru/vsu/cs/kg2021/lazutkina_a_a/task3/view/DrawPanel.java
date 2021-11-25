@@ -130,6 +130,8 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     {
         sc.setScreenWidth(this.getWidth());
         sc.setScreenHeight(this.getHeight());
+/*        sc.setRealWidth(currData.length + 1);
+        coordinatePlane.setWidth(currData.length + 1);*/
         setData();
         BufferedImage bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g = bi.createGraphics();

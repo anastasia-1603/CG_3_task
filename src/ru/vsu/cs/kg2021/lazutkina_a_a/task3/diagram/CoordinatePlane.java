@@ -83,5 +83,4 @@ public class CoordinatePlane implements Drawable
     {
         this.maxX = maxX;
     }
-
 }

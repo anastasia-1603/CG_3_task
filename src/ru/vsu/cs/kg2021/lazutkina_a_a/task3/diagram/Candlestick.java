@@ -41,8 +41,6 @@ public class Candlestick
         this.time = time;
         this.sc = sc;
         this.width = width;
-
-
     }
 
     public int getWidth()
