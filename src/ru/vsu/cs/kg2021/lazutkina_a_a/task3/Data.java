@@ -2,19 +2,24 @@ package ru.vsu.cs.kg2021.lazutkina_a_a.task3;
 
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DataService;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Arrays.copyOfRange;
 
 
 public class Data
 {
-    private final int[][] data = new int[360][4];
+    private int[][] data;
    // private final Map<Date, Double>
 
+    private Map<Date, Integer[]> dataMap;
     public Data(int min, int max)
     {
         DataService ds = new DataService();
+        dataMap = ds.dataToIntegerMap();
 
         //ds.fillData(data, min, max);
     }

@@ -1,14 +1,10 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3.service;
 
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.utils.ArrayUtil;
-
-import java.io.File;
-import java.io.FileNotFoundException;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.utils.DateUtils;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static java.util.Arrays.*;
 
 public class DataService
 {
@@ -18,7 +14,21 @@ public class DataService
     {
         try
         {
-            return dataToMap(toString2DArray("data/USDCB_161125_211125.txt"));
+            return dataToMap(Objects.requireNonNull(
+                    ArrayUtil.toString2DArray("data/USDCB_161125_211125.txt")));
+        }
+        catch (ParseException e)
+        {
+            return null;
+        }
+    }
+
+    public Map<Date, Integer[]> dataToIntegerMap()
+    {
+        try
+        {
+            return dataToIntegerMap(Objects.requireNonNull(
+                    ArrayUtil.toString2DArray("data/USDCB_161125_211125.txt")));
         }
         catch (ParseException e)
         {
@@ -30,7 +40,8 @@ public class DataService
     {
         try
         {
-            return dataToIntMap(toString2DArray("data/USDCB_161125_211125.txt"));
+            return dataToIntMap(Objects.requireNonNull(
+                    ArrayUtil.toString2DArray("data/USDCB_161125_211125.txt")));
         }
         catch (ParseException e)
         {
@@ -38,29 +49,40 @@ public class DataService
         }
     }
 
-    private Map<Date, int[]> dataToIntMap(String[][] lines) throws ParseException //todo rename
+    private Map<Date, Integer[]> dataToIntegerMap(String[][] lines) throws ParseException //todo rename
+    {
+        Map<Date, Integer[]> dataMap = new TreeMap<>();
+        for (String[] s : lines)
+        {
+            String[] data = Arrays.copyOfRange(s, 1, s.length);
+            dataMap.put(DateUtils.readDate(s[0]), ArrayUtil.toIntegerArray(data));
+        }
+        return dataMap;
+    }
+
+    private Map<Date, int[]> dataToIntMap(String[][] lines) throws ParseException //todo rename и что то сделать с нагромождением методов
     {
         Map<Date, int[]> dataMap = new TreeMap<>();
         for (String[] s : lines)
         {
             String[] data = Arrays.copyOfRange(s, 1, s.length);
-            dataMap.put(readDate(s[0]), castDoubleArrayToInt(arrayStringToDouble(data)));
+            dataMap.put(DateUtils.readDate(s[0]), ArrayUtil.castDoubleArrayToInt(ArrayUtil.arrayStringToDouble(data)));
         }
         return dataMap;
     }
 
-    private Map<Date, Double[]> dataToMap(String[][] lines) throws ParseException //todo rename
+    private Map<Date, Double[]> dataToMap(String[][] lines) throws ParseException //todo rename и сделать метод где в параметрах имя файла
     {
         Map<Date, Double[]> dataMap = new TreeMap<>();
         for (String[] s : lines)
         {
             String[] data = Arrays.copyOfRange(s, 1, s.length);
-            dataMap.put(readDate(s[0]), arrayStringToDouble(data));
+            dataMap.put(DateUtils.readDate(s[0]), ArrayUtil.arrayStringToDouble(data));
         }
         return dataMap;
     }
 
-    private int[] castDoubleArrayToInt(Double[] array)
+    /*private int[] castDoubleArrayToInt(Double[] array)
     {
         double[] doubleArr = toPrimitive(array);
         int[] intArray = new int[array.length];
@@ -69,6 +91,16 @@ public class DataService
             intArray[i] = (int) doubleArr[i];
         }
         return intArray;
+    }
+
+    private static Integer[] toIntegerArray(String[] array)
+    {
+        Integer[] newArray = new Integer[array.length];
+        for (int i = 0; i < array.length; i++)
+        {
+            newArray[i] = Integer.valueOf(array[i]);
+        }
+        return newArray;
     }
 
     private Double[] arrayStringToDouble(String[] stringArray)
@@ -109,18 +141,6 @@ public class DataService
         return list.toArray(new String[0][]);
     }
 
-    public static double[][] readDoubleArray2FromFile(String fileName)
-    {
-        try
-        {
-            return toDoubleArray2(readLinesFromFile(fileName));
-        }
-        catch (FileNotFoundException e)
-        {
-            return null;
-        }
-    }
-
     public static String[] readLinesFromFile(String fileName) throws FileNotFoundException
     {
         List<String> lines;
@@ -134,6 +154,20 @@ public class DataService
         }
         return lines.toArray(new String[0]);
     }
+
+
+    public static double[][] readDoubleArray2FromFile(String fileName)
+    {
+        try
+        {
+            return toDoubleArray2(readLinesFromFile(fileName));
+        }
+        catch (FileNotFoundException e)
+        {
+            return null;
+        }
+    }
+
 
     public static double[][] toDoubleArray2(String[] lines)
     {
@@ -158,6 +192,8 @@ public class DataService
         Double[] arr = list.toArray(new Double[0]);
         return toPrimitive(arr);
     }
+
+
 
     public static double[] toPrimitive(Double[] arr)
     {
@@ -197,7 +233,17 @@ public class DataService
         return toPrimitive(arr);
     }
 
-    private static int[] toPrimitive(Integer[] arr)
+    public int[][] toPrimitive(Integer[][] arr) //todo util
+    {
+        int[][] newArray = new int[arr.length][];
+        for (int i = 0; i < arr.length; i++)
+        {
+           newArray[i] = toPrimitive(arr[i]);
+        }
+        return newArray;
+    }
+
+    public static int[] toPrimitive(Integer[] arr) //todo -> util
     {
         if (arr == null)
         {
@@ -270,5 +316,5 @@ public class DataService
         }
         return newData;
     }
-
+*/
 }
