@@ -1,6 +1,5 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3.service;
 
-import com.sun.source.tree.Tree;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.utils.ArrayUtil;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.utils.DateUtils;
 import java.text.ParseException;
@@ -8,17 +7,15 @@ import java.util.*;
 
 import static java.util.Arrays.copyOfRange;
 
-
 public class DataService
 {
     Random random = new Random();
 
-    public Map<Date, Double[]> dataToMap()
+    public TreeMap<Date, Double[]> dataToDoubleMap(String filename)
     {
         try
         {
-            return dataToMap(Objects.requireNonNull(
-                    ArrayUtil.toString2DArray("data/USDCB_161125_211125.txt")));
+            return textToDoubleMap(filename);
         }
         catch (ParseException e)
         {
@@ -26,12 +23,12 @@ public class DataService
         }
     }
 
-    public TreeMap<Date, Integer[]> dataToIntegerMap()
+    public TreeMap<Date, Integer[]> dataToIntegerMap(String filename)
     {
         try
         {
             return dataToIntegerMap(Objects.requireNonNull(
-                    ArrayUtil.toString2DArray("data/USDCB_161125_211125.txt")));
+                    ArrayUtil.toString2DArray(filename)));
         }
         catch (ParseException e)
         {
@@ -74,9 +71,11 @@ public class DataService
         return dataMap;
     }
 
-    private Map<Date, Double[]> dataToMap(String[][] lines) throws ParseException //todo rename и сделать метод где в параметрах имя файла
+    private TreeMap<Date, Double[]> textToDoubleMap(String filename) throws ParseException //todo rename и сделать метод где в параметрах имя файла
     {
-        Map<Date, Double[]> dataMap = new TreeMap<>();
+        String[][] lines = ArrayUtil.toString2DArray(filename);
+        TreeMap<Date, Double[]> dataMap = new TreeMap<>();
+        assert lines != null;
         for (String[] s : lines)
         {
             String[] data = copyOfRange(s, 1, s.length);
@@ -103,12 +102,10 @@ public class DataService
 
     public TreeMap<GregorianCalendar, Integer[]> selectDataByWeek(TreeMap<GregorianCalendar, Integer[]> dataMap)
     {
-
-
         Iterator<Map.Entry<GregorianCalendar, Integer[]>> itr = dataMap.entrySet().iterator();
         TreeMap<GregorianCalendar, Integer[]> newMap = new TreeMap<>();
         int week = dataMap.firstKey().get(Calendar.WEEK_OF_MONTH);
-        TreeMap<GregorianCalendar, Integer[]> slice = new TreeMap<>();
+        List<Integer[]> slice = new ArrayList<>();
         while (itr.hasNext())
         {
             Map.Entry<GregorianCalendar, Integer[]> entry = itr.next();
@@ -118,16 +115,17 @@ public class DataService
             c.set(Calendar.WEEK_OF_MONTH, entry.getKey().get(Calendar.WEEK_OF_MONTH));
             while (itr.hasNext() && entry.getKey().get(Calendar.WEEK_OF_MONTH) == week)
             {
-                slice.put(entry.getKey(), entry.getValue());
+                slice.add(entry.getValue());
                 entry = itr.next();
             }
             if (slice.size() != 0)
             {
-                Integer[] newData = new Integer[slice.firstEntry().getValue().length];
-                newData[0] = slice.firstEntry().getValue()[0];
-                newData[1] = ArrayUtil.findMaxValue(slice.values());
-                newData[2] = ArrayUtil.findMinValue(slice.values());
-                newData[3] = slice.lastEntry().getValue()[3];
+                Integer[] newData = new Integer[slice.get(0).length];
+                newData[0] = slice.get(0)[0];
+                newData[1] = ArrayUtil.findMaxValue(slice);
+                newData[2] = ArrayUtil.findMinValue(slice);
+                newData[3] = slice.get(slice.size()-1)[slice.get(0).length-1];
+
                 newMap.put(c, newData);
             }
 
@@ -141,7 +139,7 @@ public class DataService
     public static void main(String[] args)
     {
         DataService ds = new DataService();
-        TreeMap<Date, Integer[]> oldMap = ds.dataToIntegerMap();
+        TreeMap<Date, Integer[]> oldMap = ds.dataToIntegerMap("data/USDCB_161125_211125.txt");
         TreeMap<GregorianCalendar, Integer[]> dataMap = ds.dateMapToCalendar(oldMap);
         dataMap = ds.selectDataByWeek(dataMap);
 

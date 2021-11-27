@@ -10,7 +10,8 @@ import static java.util.Arrays.copyOfRange;
 public class Data
 {
     private int[][] data = new int[360][4];
-   // private final Map<Date, Double>
+
+    private TreeMap<Date, Double[]> doubleDataMap;
 
     private TreeMap<Date, Integer[]> dataMap;
     public Data(int min, int max)
@@ -22,7 +23,8 @@ public class Data
     public Data()
     {
         DataService ds = new DataService();
-        dataMap = ds.dataToIntegerMap();
+       // dataMap = ds.dataToIntegerMap("data/USDCB_161125_211125.txt");
+        doubleDataMap = ds.dataToDoubleMap("data/USDCB_161125_211125.txt");
     }
 
     public TreeMap<Date, Integer[]> getDataMap()
