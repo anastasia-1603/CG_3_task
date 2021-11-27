@@ -35,19 +35,20 @@ public class DrawService implements LineDrawer
                 Math.abs(p2.getColumn() - p1.getColumn()), Math.abs(p2.getRow() - p1.getRow()));
     }
 
-    public void drawCandle(Graphics2D g, ScreenConverter sc, Candlestick candle)
+    public void drawCandle(Graphics2D g, ScreenConverter sc, Candlestick candle, int x)
     {
-        int time = candle.getTime();
+       // Date date = candle.getDate();
+       // long time = date.getTime();
         int high = candle.getHigh();
         int up = candle.getUp();
         int low = candle.getLow();
         int bottom = candle.getBottom();
         int interval = candle.getWidth();
 
-        Line upperShadow = new Line(new RealPoint(time, high), new RealPoint(time, up));
-        Rectangle realBody = new Rectangle(new RealPoint(time - interval * 0.4, up),
-                new RealPoint(time + interval * 0.4, bottom));
-        Line lowerShadow = new Line(new RealPoint(time, bottom), new RealPoint(time, low));
+        Line upperShadow = new Line(new RealPoint(x, high), new RealPoint(x, up));
+        Rectangle realBody = new Rectangle(new RealPoint(x - interval * 0.4, up),
+                new RealPoint(x + interval * 0.4, bottom));
+        Line lowerShadow = new Line(new RealPoint(x, bottom), new RealPoint(x, low));
 
         drawLine(g, sc,upperShadow);
         Color oldC = g.getColor();
@@ -59,7 +60,7 @@ public class DrawService implements LineDrawer
         drawLine(g, sc, lowerShadow);
     }
 
-    public void drawDiagram(int[][] data, ScreenConverter sc, Graphics2D g)
+    /*public void drawDiagram(int[][] data, ScreenConverter sc, Graphics2D g)
     {
         int num = data.length;
 
@@ -69,18 +70,17 @@ public class DrawService implements LineDrawer
                     data[i][2], data[i][3], i+1, 1, sc);
             drawCandle(g, sc, candlestick);
         }
-    }
+    }*/
 
     public void drawDiagram(TreeMap<Date, Integer[]> dataMap, ScreenConverter sc, Graphics2D g)
     {
-       /* int num = dataMap.size();
-
+        int i = 1;
         for (Date date : dataMap.keySet())
         {
             Candlestick candlestick = new Candlestick(date, dataMap.get(date)[0],
                     dataMap.get(date)[1], dataMap.get(date)[2], dataMap.get(date)[3], 1);
-            drawCandle(g, sc, candlestick);
-        }*/
+            drawCandle(g, sc, candlestick, i++);
+        }
     }
 
     public void drawString(Graphics2D gr, ScreenConverter sc, String text, RealPoint realPoint)

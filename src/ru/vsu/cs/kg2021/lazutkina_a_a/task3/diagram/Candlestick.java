@@ -8,20 +8,42 @@ import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Line;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Rectangle;
 
 import java.awt.*;
+import java.util.Date;
 
 public class Candlestick
 {
     private int high;
     private int low;
-    private int time;
+    //private int time;
+    private Date date;
     private int bottom;
     private int up;
 
     private int width;
     private CandleType type;
-    private ScreenConverter sc;
 
-    public Candlestick(int low, int open, int close, int high, int time, int width, ScreenConverter sc)
+    public Candlestick(Date date, int open, int high, int low, int close, int width)
+    {
+        if (close > open)
+        {
+            type = CandleType.INCREASING;
+            up = close;
+            bottom = open;
+        }
+        else
+        {
+            type = CandleType.DECREASING;
+            up = open;
+            bottom = close;
+        }
+
+        this.high = high;
+        this.low = low;
+        this.date = date;
+        this.width = width;
+    }
+
+    /*public Candlestick(int low, int open, int close, int high, int time, int width, ScreenConverter sc)
     {
         if (close > open)
         {
@@ -39,9 +61,8 @@ public class Candlestick
         this.high = high;
         this.low = low;
         this.time = time;
-        this.sc = sc;
         this.width = width;
-    }
+    }*/
 
     public int getWidth()
     {
@@ -58,10 +79,15 @@ public class Candlestick
         return low;
     }
 
-    public int getTime()
+    public Date getDate()
+    {
+        return date;
+    }
+
+    /*public int getTime()
     {
         return time;
-    }
+    }*/
 
     public int getBottom()
     {

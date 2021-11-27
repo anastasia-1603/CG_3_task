@@ -11,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.Date;
+import java.util.TreeMap;
 
 public class DrawPanel extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener
 {
@@ -31,14 +33,19 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     private CoordinatePlane coordinatePlane;
     private int[][] currData;
 
+
+    private TreeMap<Date, Integer[]> dataMap;
+
+
     public DrawPanel()
     {
-        setDefaultView();
+        //setDefaultView();
         this.setSize(800, 600);
         sc = new ScreenConverter(0, this.getHeight(), currData.length + 1, MAX_VALUE,
                 this.getWidth(), this.getHeight());
         coordinatePlane = new CoordinatePlane(3, this.getHeight()-3,
                 this.getWidth(), this.getHeight(), sc);
+        dataMap = new Data().getDataMap();
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
@@ -61,7 +68,8 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         g.fillRect(0, 0, getWidth(), getHeight());
         g.setColor(Color.BLACK);
         g.setStroke(new BasicStroke(2));
-        DRAW_SERVICE.drawDiagram(currData, sc, g);
+        //DRAW_SERVICE.drawDiagram(currData, sc, g);
+        DRAW_SERVICE.drawDiagram();
         coordinatePlane.draw(g);
         origG.drawImage(bi, 0, 0, null);
         g.dispose();

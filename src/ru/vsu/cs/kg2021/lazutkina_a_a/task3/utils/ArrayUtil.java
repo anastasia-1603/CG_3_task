@@ -8,6 +8,19 @@ public class ArrayUtil
 {
     private final static Random random = new Random();
 
+
+    public static int[][] fillRandom(int[][] array, int min, int max)
+    {
+        for (int i = 0; i < array.length; i++)
+        {
+            for (int j = 0; j < array[0].length; j++)
+            {
+                array[i][j] = ArrayUtil.random(min, max);
+            }
+        }
+        return array;
+    }
+
     public static double[][] readDoubleArray2FromFile(String fileName)
     {
         try
