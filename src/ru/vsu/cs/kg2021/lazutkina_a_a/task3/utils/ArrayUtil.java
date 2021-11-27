@@ -8,6 +8,59 @@ public class ArrayUtil
 {
     private final static Random random = new Random();
 
+    public static Integer findMinValue(Collection<Integer[]> collection)
+    {
+        Integer min = 0; //todo исправить на array[0]
+        for (Integer[] array : collection)
+        {
+            Integer localMin = findMin(array);
+            if (localMin > min)
+            {
+                min = localMin;
+            }
+        }
+        return min;
+    }
+
+    public static Integer findMin(Integer[] array)
+    {
+        int min = array[0];
+        for (int j : array)
+        {
+            if (j < min)
+            {
+                min = j;
+            }
+        }
+        return min;
+    }
+
+    public static Integer findMaxValue(Collection<Integer[]> collection)
+    {
+        Integer max = 0; //todo исправить на array[0]
+        for (Integer[] array : collection)
+        {
+            Integer localMax = findMax(array);
+            if (localMax > max)
+            {
+                max = localMax;
+            }
+        }
+        return max;
+    }
+
+    public static Integer findMax(Integer[] array)
+    {
+        int max = array[0];
+        for (int j : array)
+        {
+            if (j > max)
+            {
+                max = j;
+            }
+        }
+        return max;
+    }
 
     public static int[][] fillRandom(int[][] array, int min, int max)
     {
@@ -31,6 +84,17 @@ public class ArrayUtil
         {
             return null;
         }
+    }
+
+    public static Integer[] castDoubleArrayToInteger(Double[] array)
+    {
+        Integer[] integerArray = new Integer[array.length];
+        double[] doubleArr = toPrimitive(array);
+        for (int i = 0; i < array.length; i++)
+        {
+            integerArray[i] = (int) doubleArr[i];
+        }
+        return integerArray;
     }
 
     public static int[] castDoubleArrayToInt(Double[] array)
@@ -187,7 +251,7 @@ public class ArrayUtil
 
     public static int findMax(int[][] array)
     {
-        int max = 0;
+        int max = array[0][0];
         for (int[] data : array)
         {
             int localMax = findMax(data);
@@ -201,7 +265,7 @@ public class ArrayUtil
 
     public static int findMax(int[] array)
     {
-        int max = 0;
+        int max = array[0];
         for (int j : array)
         {
             if (j > max)

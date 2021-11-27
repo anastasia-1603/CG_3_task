@@ -58,7 +58,7 @@ public class DataService
         for (String[] s : lines)
         {
             String[] data = copyOfRange(s, 1, s.length);
-            dataMap.put(DateUtils.readDate(s[0]), ArrayUtil.toIntegerArray(data));
+            dataMap.put(DateUtils.readDate(s[0]),ArrayUtil.castDoubleArrayToInteger(ArrayUtil.arrayStringToDouble(data)));
         }
         return dataMap;
     }
@@ -101,17 +101,69 @@ public class DataService
         return data;
     }
 
-    public int[][] selectDataByWeek(TreeMap<GregorianCalendar, Integer[]> dataMap)
+    public TreeMap<GregorianCalendar, Integer[]> selectDataByWeek(TreeMap<GregorianCalendar, Integer[]> dataMap)
     {
+
+
+        Iterator<Map.Entry<GregorianCalendar, Integer[]>> itr = dataMap.entrySet().iterator();
+        TreeMap<GregorianCalendar, Integer[]> newMap = new TreeMap<>();
         int week = dataMap.firstKey().get(Calendar.WEEK_OF_MONTH);
-        List<Integer[]> list = new ArrayList<>();
+        TreeMap<GregorianCalendar, Integer[]> slice = new TreeMap<>();
+        while (itr.hasNext())
+        {
+            Map.Entry<GregorianCalendar, Integer[]> entry = itr.next();
+            GregorianCalendar c = new GregorianCalendar();
+            c.set(Calendar.YEAR, entry.getKey().get(Calendar.YEAR));
+            c.set(Calendar.MONTH, entry.getKey().get(Calendar.MONTH));
+            c.set(Calendar.WEEK_OF_MONTH, entry.getKey().get(Calendar.WEEK_OF_MONTH));
+            while (itr.hasNext() && entry.getKey().get(Calendar.WEEK_OF_MONTH) == week)
+            {
+                slice.put(entry.getKey(), entry.getValue());
+                entry = itr.next();
+            }
+            if (slice.size() != 0)
+            {
+                Integer[] newData = new Integer[slice.firstEntry().getValue().length];
+                newData[0] = slice.firstEntry().getValue()[0];
+                newData[1] = ArrayUtil.findMaxValue(slice.values());
+                newData[2] = ArrayUtil.findMinValue(slice.values());
+                newData[3] = slice.lastEntry().getValue()[3];
+                newMap.put(c, newData);
+            }
+
+            slice.clear();
+            week = entry.getKey().get(Calendar.WEEK_OF_MONTH);
+        }
+
+        return newMap;
+    }
+
+    public static void main(String[] args)
+    {
+        DataService ds = new DataService();
+        TreeMap<Date, Integer[]> oldMap = ds.dataToIntegerMap();
+        TreeMap<GregorianCalendar, Integer[]> dataMap = ds.dateMapToCalendar(oldMap);
+        dataMap = ds.selectDataByWeek(dataMap);
+
         for (GregorianCalendar c : dataMap.keySet())
         {
-            if (c.get(Calendar.WEEK_OF_MONTH) == week)
-            {
-               list.add(dataMap.get(c));
-            }
+            System.out.print(c.get(Calendar.YEAR) + " " + c.get(Calendar.MONTH) + " "
+                    + c.get(Calendar.WEEK_OF_MONTH) + " " + c.get(Calendar.DAY_OF_MONTH));
+            System.out.print(Arrays.toString(dataMap.get(c)));
+            System.out.println();
         }
+    }
+
+    public TreeMap<GregorianCalendar, Integer[]> dateMapToCalendar(TreeMap<Date, Integer[]> map)
+    {
+        TreeMap<GregorianCalendar, Integer[]> dataMap = new TreeMap<>();
+        for (Date d : map.keySet())
+        {
+            GregorianCalendar c = new GregorianCalendar();
+            c.setTime(d);
+            dataMap.put(c, map.get(d));
+        }
+        return dataMap;
     }
 
     public int[][] selectDataByWeek(int[][] data)
