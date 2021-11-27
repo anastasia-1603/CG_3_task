@@ -5,6 +5,8 @@ import ru.vsu.cs.kg2021.lazutkina_a_a.task3.utils.DateUtils;
 import java.text.ParseException;
 import java.util.*;
 
+import static java.util.Arrays.copyOfRange;
+
 
 public class DataService
 {
@@ -54,7 +56,7 @@ public class DataService
         Map<Date, Integer[]> dataMap = new TreeMap<>();
         for (String[] s : lines)
         {
-            String[] data = Arrays.copyOfRange(s, 1, s.length);
+            String[] data = copyOfRange(s, 1, s.length);
             dataMap.put(DateUtils.readDate(s[0]), ArrayUtil.toIntegerArray(data));
         }
         return dataMap;
@@ -65,7 +67,7 @@ public class DataService
         Map<Date, int[]> dataMap = new TreeMap<>();
         for (String[] s : lines)
         {
-            String[] data = Arrays.copyOfRange(s, 1, s.length);
+            String[] data = copyOfRange(s, 1, s.length);
             dataMap.put(DateUtils.readDate(s[0]), ArrayUtil.castDoubleArrayToInt(ArrayUtil.arrayStringToDouble(data)));
         }
         return dataMap;
@@ -76,7 +78,7 @@ public class DataService
         Map<Date, Double[]> dataMap = new TreeMap<>();
         for (String[] s : lines)
         {
-            String[] data = Arrays.copyOfRange(s, 1, s.length);
+            String[] data = copyOfRange(s, 1, s.length);
             dataMap.put(DateUtils.readDate(s[0]), ArrayUtil.arrayStringToDouble(data));
         }
         return dataMap;
@@ -256,7 +258,7 @@ public class DataService
         }
         return result;
     }
-
+*/
     public int[][] fillData(int[][] data, int min, int max)
     {
         fillRandom(data, min, max);
@@ -316,5 +318,5 @@ public class DataService
         }
         return newData;
     }
-*/
+
 }

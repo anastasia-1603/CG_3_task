@@ -6,6 +6,9 @@ import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Line;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Rectangle;
 
 import java.awt.*;
+import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class DrawService implements LineDrawer
 {
@@ -47,14 +50,12 @@ public class DrawService implements LineDrawer
         Line lowerShadow = new Line(new RealPoint(time, bottom), new RealPoint(time, low));
 
         drawLine(g, sc,upperShadow);
-        if (candle.getType() == CandleType.INCREASING)
-        {
-            drawRect(g, sc, realBody);
-        }
-        else
-        {
-            fillRect(g, sc, realBody);
-        }
+        Color oldC = g.getColor();
+        g.setColor(candle.getType().color);
+        fillRect(g, sc, realBody);
+        g.setColor(Color.BLACK);
+        drawRect(g, sc, realBody);
+        g.setColor(oldC);
         drawLine(g, sc, lowerShadow);
     }
 
@@ -68,6 +69,18 @@ public class DrawService implements LineDrawer
                     data[i][2], data[i][3], i+1, 1, sc);
             drawCandle(g, sc, candlestick);
         }
+    }
+
+    public void drawDiagram(TreeMap<Date, Integer[]> dataMap, ScreenConverter sc, Graphics2D g)
+    {
+       /* int num = dataMap.size();
+
+        for (Date date : dataMap.keySet())
+        {
+            Candlestick candlestick = new Candlestick(date, dataMap.get(date)[0],
+                    dataMap.get(date)[1], dataMap.get(date)[2], dataMap.get(date)[3], 1);
+            drawCandle(g, sc, candlestick);
+        }*/
     }
 
     public void drawString(Graphics2D gr, ScreenConverter sc, String text, RealPoint realPoint)

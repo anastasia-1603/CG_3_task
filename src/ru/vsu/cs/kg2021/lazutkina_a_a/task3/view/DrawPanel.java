@@ -34,12 +34,37 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     public DrawPanel()
     {
         setDefaultView();
-        sc = new ScreenConverter(0, MAX_VALUE, currData.length + 1, MAX_VALUE,
+        this.setSize(800, 600);
+        sc = new ScreenConverter(0, this.getHeight(), currData.length + 1, MAX_VALUE,
                 this.getWidth(), this.getHeight());
-        coordinatePlane = new CoordinatePlane(sc, MAX_VALUE, currData.length + 1);
+        coordinatePlane = new CoordinatePlane(3, this.getHeight()-3,
+                this.getWidth(), this.getHeight(), sc);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
+    }
+
+    @Override
+    protected void paintComponent(Graphics origG)
+    {
+        sc.setScreenWidth(this.getWidth());
+        sc.setScreenHeight(this.getHeight());
+        coordinatePlane.setWidth(this.getWidth());
+        coordinatePlane.setHeight(this.getHeight());
+        coordinatePlane.setZeroY(this.getHeight()-3);
+/*      sc.setRealWidth(currData.length + 1);
+        coordinatePlane.setWidth(currData.length + 1);*/
+        setData();
+        BufferedImage bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = bi.createGraphics();
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, getWidth(), getHeight());
+        g.setColor(Color.BLACK);
+        g.setStroke(new BasicStroke(2));
+        DRAW_SERVICE.drawDiagram(currData, sc, g);
+        coordinatePlane.draw(g);
+        origG.drawImage(bi, 0, 0, null);
+        g.dispose();
     }
 
     private void setDefaultView()
@@ -87,12 +112,12 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 
     public void setData()
     {
-       switch (time)
-       {
-           case DAY -> setDataByDay();
-           case WEEK -> setDataByWeek();
-           case MONTH -> setDataByMonth();
-       }
+        switch (time)
+        {
+            case DAY -> setDataByDay();
+            case WEEK -> setDataByWeek();
+            case MONTH -> setDataByMonth();
+        }
     }
 
     public void setDataByDay()
@@ -123,26 +148,6 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         {
             setCurrData(DATA_SERVICE.selectDataByMonth(YEAR_DATA));
         }
-    }
-
-    @Override
-    protected void paintComponent(Graphics origG)
-    {
-        sc.setScreenWidth(this.getWidth());
-        sc.setScreenHeight(this.getHeight());
-/*        sc.setRealWidth(currData.length + 1);
-        coordinatePlane.setWidth(currData.length + 1);*/
-        setData();
-        BufferedImage bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = bi.createGraphics();
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, getWidth(), getHeight());
-        g.setColor(Color.BLACK);
-        g.setStroke(new BasicStroke(2));
-        coordinatePlane.draw(g);
-        DRAW_SERVICE.drawDiagram(currData, sc, g);
-        origG.drawImage(bi, 0, 0, null);
-        g.dispose();
     }
 
     @Override

@@ -12,16 +12,15 @@ import static java.util.Arrays.copyOfRange;
 
 public class Data
 {
-    private int[][] data;
+    private int[][] data = new int[360][4];
    // private final Map<Date, Double>
 
     private Map<Date, Integer[]> dataMap;
     public Data(int min, int max)
     {
         DataService ds = new DataService();
-        dataMap = ds.dataToIntegerMap();
-
-        //ds.fillData(data, min, max);
+        //dataMap = ds.dataToIntegerMap();
+        data = ds.fillData(data, min, max);
     }
 
     public int[][] getData()

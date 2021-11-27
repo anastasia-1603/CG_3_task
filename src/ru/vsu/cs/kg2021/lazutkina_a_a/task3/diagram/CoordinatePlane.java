@@ -5,6 +5,7 @@ import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DrawService;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Line;
 
 import java.awt.*;
+import java.awt.geom.Line2D;
 
 public class CoordinatePlane implements Drawable
 {
@@ -14,33 +15,85 @@ public class CoordinatePlane implements Drawable
     private int maxY;
     private int maxX;
 
+    int zeroX;
+    int zeroY;
+    private int height;
+    private int width;
+
     private final double COF_DASH = 0.005;
     private final DrawService DS = new DrawService();
     private ScreenConverter sc;
 
-    public CoordinatePlane(ScreenConverter sc, int maxY, int maxX)
+/*    public CoordinatePlane(ScreenConverter sc, int maxY, int maxX)
     {
         this.sc = sc;
         this.maxX = maxX;
         this.maxY = maxY;
+
         this.axisX = new Line(
                 new RealPoint(sc.getCx(), 0),
                 new RealPoint(sc.getRealWidth(), 0));
         this.axisY = new Line(
                 new RealPoint(sc.getCx(), 0),
                 new RealPoint(sc.getCx(), maxY));
+    }*/
+
+    public CoordinatePlane(int zeroX, int zeroY, int width, int height, ScreenConverter sc)
+    {
+        this.zeroX = zeroX;
+        this.zeroY = zeroY;
+        this.height = height;
+        this.width = width;
+        this.sc = sc;
     }
 
-    @Override
-    public void draw(Graphics2D g)
+    public int getHeight()
     {
-        drawAxisX(g);
-        drawAxisY(g);
+        return height;
+    }
+
+    public void setHeight(int height)
+    {
+        this.height = height;
+    }
+
+    public int getWidth()
+    {
+        return width;
     }
 
     public void setWidth(int width)
     {
-        this.axisX.getPoint2().setX(width);
+        this.width = width;
+    }
+
+    public void draw(Graphics2D g)
+    {
+        BasicStroke oldStroke = (BasicStroke) g.getStroke();
+        g.setStroke(new BasicStroke(3));
+        g.drawLine(zeroX, zeroY, width, zeroY);
+        g.drawLine(zeroX, zeroY, zeroX, -height);
+        g.setStroke(oldStroke);
+    }
+
+    public int getZeroX()
+    {
+        return zeroX;
+    }
+
+    public void setZeroX(int zeroX)
+    {
+        this.zeroX = zeroX;
+    }
+
+    public int getZeroY()
+    {
+        return zeroY;
+    }
+
+    public void setZeroY(int zeroY)
+    {
+        this.zeroY = zeroY;
     }
 
     private void drawAxisY(Graphics2D g)
