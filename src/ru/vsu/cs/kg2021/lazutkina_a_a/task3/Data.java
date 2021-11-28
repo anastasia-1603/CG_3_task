@@ -1,6 +1,7 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3;
 
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DataService;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.utils.DateUtils;
 
 import java.util.*;
 
@@ -14,6 +15,8 @@ public class Data
     private TreeMap<Date, Double[]> doubleDataMap;
 
     private TreeMap<Date, Integer[]> dataMap;
+
+    private TreeMap<GregorianCalendar, Integer[]> calendarTreeMap;
     public Data(int min, int max)
     {
         DataService ds = new DataService();
@@ -23,13 +26,19 @@ public class Data
     public Data()
     {
         DataService ds = new DataService();
-       // dataMap = ds.dataToIntegerMap("data/USDCB_161125_211125.txt");
-        doubleDataMap = ds.dataToDoubleMap("data/USDCB_161125_211125.txt");
+        dataMap = ds.dataToIntegerMap("data/USDCB_161125_211125.txt");
+        calendarTreeMap = DateUtils.dateMapToCalendar(dataMap);
+        //doubleDataMap = ds.dataToDoubleMap("data/USDCB_161125_211125.txt");
     }
 
     public TreeMap<Date, Integer[]> getDataMap()
     {
         return dataMap;
+    }
+
+    public TreeMap<GregorianCalendar, Integer[]> getCalendarTreeMap()
+    {
+        return calendarTreeMap;
     }
 
     public void setDataMap(TreeMap<Date, Integer[]> dataMap)

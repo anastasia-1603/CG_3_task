@@ -2,8 +2,8 @@ package ru.vsu.cs.kg2021.lazutkina_a_a.task3;
 
 public class ScreenPoint
 {
-    private final int column;
-    private final int row;
+    private int column;
+    private int row;
 
     public ScreenPoint(int column, int row)
     {
@@ -19,5 +19,15 @@ public class ScreenPoint
     public int getRow()
     {
         return row;
+    }
+
+    public void setColumn(int column)
+    {
+        this.column = column;
+    }
+
+    public void setRow(int row)
+    {
+        this.row = row;
     }
 }

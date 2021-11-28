@@ -1,4 +1,4 @@
-package ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram;
+/*package ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram;
 
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.*;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DrawService;
@@ -24,7 +24,7 @@ public class CoordinatePlane implements Drawable
     private final DrawService DS = new DrawService();
     private ScreenConverter sc;
 
-/*    public CoordinatePlane(ScreenConverter sc, int maxY, int maxX)
+*//*    public CoordinatePlane(ScreenConverter sc, int maxY, int maxX)
     {
         this.sc = sc;
         this.maxX = maxX;
@@ -36,7 +36,7 @@ public class CoordinatePlane implements Drawable
         this.axisY = new Line(
                 new RealPoint(sc.getCx(), 0),
                 new RealPoint(sc.getCx(), maxY));
-    }*/
+    }*//*
 
     public CoordinatePlane(int zeroX, int zeroY, int width, int height, ScreenConverter sc)
     {
@@ -45,6 +45,7 @@ public class CoordinatePlane implements Drawable
         this.height = height;
         this.width = width;
         this.sc = sc;
+
     }
 
     public int getHeight()
@@ -72,8 +73,24 @@ public class CoordinatePlane implements Drawable
         BasicStroke oldStroke = (BasicStroke) g.getStroke();
         g.setStroke(new BasicStroke(3));
         g.drawLine(zeroX, zeroY, width, zeroY);
-        g.drawLine(zeroX, zeroY, zeroX, -height);
+        g.drawLine(zeroX, zeroY, zeroX, -height); //todo понять что за костыль, почему -
+
+        int interval = width / 10;
+        for (int i = zeroX + interval; i < zeroX + width; i += interval)
+        {
+            drawDashInScreen(g, zeroX + i, zeroY, true);
+        }
+
         g.setStroke(oldStroke);
+    }
+
+    private void drawDashInScreen(Graphics2D g, int x, int y, boolean vertical)
+    {
+        ScreenPoint p1Dash = new ScreenPoint(x, y);
+        ScreenPoint p2Dash = vertical ?
+                new ScreenPoint(p1Dash.getColumn(), y - 3) :
+                new ScreenPoint(x + 3, p1Dash.getRow());
+        g.drawLine(p1Dash.getColumn(), p1Dash.getRow(), p2Dash.getColumn(), p2Dash.getRow());
     }
 
     public int getZeroX()
@@ -136,4 +153,4 @@ public class CoordinatePlane implements Drawable
     {
         this.maxX = maxX;
     }
-}
+}*/

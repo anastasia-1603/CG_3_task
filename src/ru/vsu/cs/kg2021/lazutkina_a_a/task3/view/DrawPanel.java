@@ -1,7 +1,6 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3.view;
 
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.*;
-import ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram.CoordinatePlane;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DataService;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DrawService;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.view.status.Period;
@@ -12,6 +11,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.TreeMap;
 
 public class DrawPanel extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener
@@ -30,11 +30,11 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     private Time time;
 
     private ScreenConverter sc;
-    private CoordinatePlane coordinatePlane;
+    //private CoordinatePlane coordinatePlane;
     private int[][] currData;
+    private TreeMap<GregorianCalendar, Integer[]> currData2;
 
-
-    private TreeMap<Date, Integer[]> dataMap;
+    //private TreeMap<Date, Integer[]> dataMap;
 
 
     public DrawPanel()
@@ -43,8 +43,8 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         this.setSize(800, 600);
         sc = new ScreenConverter(0, this.getHeight(), currData.length + 1, MAX_VALUE,
                 this.getWidth(), this.getHeight());
-        coordinatePlane = new CoordinatePlane(3, this.getHeight()-3,
-                this.getWidth(), this.getHeight(), sc);
+        /*coordinatePlane = new CoordinatePlane(3, this.getHeight()-3,
+                this.getWidth(), this.getHeight(), sc);*/
         //dataMap = new Data().getDataMap();
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
@@ -56,9 +56,6 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     {
         sc.setScreenWidth(this.getWidth());
         sc.setScreenHeight(this.getHeight());
-        coordinatePlane.setWidth(this.getWidth());
-        coordinatePlane.setHeight(this.getHeight());
-        coordinatePlane.setZeroY(this.getHeight()-3);
 /*      sc.setRealWidth(currData.length + 1);
         coordinatePlane.setWidth(currData.length + 1);*/
         setData();
@@ -68,9 +65,11 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         g.fillRect(0, 0, getWidth(), getHeight());
         g.setColor(Color.BLACK);
         g.setStroke(new BasicStroke(2));
-        //DRAW_SERVICE.drawDiagram(currData, sc, g);
+        TreeMap<GregorianCalendar, Integer[]> dataMap = new Data().getCalendarTreeMap();
+        DRAW_SERVICE.drawDiagram(currData, sc, g);
+        DRAW_SERVICE.drawCoordinatePlane(g, 3, this.getHeight()-3, this.getWidth(), this.getHeight(), dataMap);
         //DRAW_SERVICE.drawDiagram();
-        coordinatePlane.draw(g);
+
         origG.drawImage(bi, 0, 0, null);
         g.dispose();
     }
@@ -82,7 +81,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         time = Time.DAY;
     }
 
-    public void changeCoordinatePlaneWidth()
+    /*public void changeCoordinatePlaneWidth()
     {
         switch (period)
         {
@@ -90,7 +89,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
             case MONTH -> coordinatePlane.setWidth(MONTH_DATA.length + 1);
             case YEAR -> coordinatePlane.setWidth(YEAR_DATA.length + 1);
         }
-    }
+    }*/
 
     public Period getPeriod()
     {

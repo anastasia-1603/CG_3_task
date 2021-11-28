@@ -132,11 +132,10 @@ public class DataService
             slice.clear();
             week = entry.getKey().get(Calendar.WEEK_OF_MONTH);
         }
-
         return newMap;
     }
 
-    public static void main(String[] args)
+/*    public static void main(String[] args)
     {
         DataService ds = new DataService();
         TreeMap<Date, Integer[]> oldMap = ds.dataToIntegerMap("data/USDCB_161125_211125.txt");
@@ -150,19 +149,7 @@ public class DataService
             System.out.print(Arrays.toString(dataMap.get(c)));
             System.out.println();
         }
-    }
-
-    public TreeMap<GregorianCalendar, Integer[]> dateMapToCalendar(TreeMap<Date, Integer[]> map)
-    {
-        TreeMap<GregorianCalendar, Integer[]> dataMap = new TreeMap<>();
-        for (Date d : map.keySet())
-        {
-            GregorianCalendar c = new GregorianCalendar();
-            c.setTime(d);
-            dataMap.put(c, map.get(d));
-        }
-        return dataMap;
-    }
+    }*/
 
     public int[][] selectDataByWeek(int[][] data)
     {
@@ -195,5 +182,4 @@ public class DataService
         }
         return newData;
     }
-
 }

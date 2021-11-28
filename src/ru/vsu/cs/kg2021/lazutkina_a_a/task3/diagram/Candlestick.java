@@ -9,13 +9,15 @@ import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Rectangle;
 
 import java.awt.*;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class Candlestick
 {
     private int high;
     private int low;
-    //private int time;
+    private int time;
     private Date date;
+    private GregorianCalendar calendar;
     private int bottom;
     private int up;
 
@@ -43,7 +45,28 @@ public class Candlestick
         this.width = width;
     }
 
-    /*public Candlestick(int low, int open, int close, int high, int time, int width, ScreenConverter sc)
+    public Candlestick(GregorianCalendar calendar, int open, int high, int low, int close, int width)
+    {
+        if (close > open)
+        {
+            type = CandleType.INCREASING;
+            up = close;
+            bottom = open;
+        }
+        else
+        {
+            type = CandleType.DECREASING;
+            up = open;
+            bottom = close;
+        }
+
+        this.high = high;
+        this.low = low;
+        this.calendar = calendar;
+        this.width = width;
+    }
+
+    public Candlestick(int low, int open, int close, int high, int time, int width, ScreenConverter sc)
     {
         if (close > open)
         {
@@ -62,7 +85,7 @@ public class Candlestick
         this.low = low;
         this.time = time;
         this.width = width;
-    }*/
+    }
 
     public int getWidth()
     {
@@ -84,10 +107,10 @@ public class Candlestick
         return date;
     }
 
-    /*public int getTime()
+    public int getTime()
     {
         return time;
-    }*/
+    }
 
     public int getBottom()
     {
