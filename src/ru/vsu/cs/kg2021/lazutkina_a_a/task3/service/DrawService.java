@@ -87,11 +87,16 @@ public class DrawService implements LineDrawer
     public void drawDiagram(int[][] data, ScreenConverter sc, Graphics2D g)
     {
         int num = data.length;
-
+        GregorianCalendar c = new GregorianCalendar();
+        c.set(Calendar.YEAR, 2019);
+        c.set(Calendar.MONTH, 0);
+        c.set(Calendar.DAY_OF_MONTH, 1);
         for (int i = 0; i < num; i++)
         {
-            Candlestick candlestick = new Candlestick(data[i][0], data[i][1],
-                    data[i][2], data[i][3], i+1, 1, sc);
+            GregorianCalendar c2 = (GregorianCalendar) c.clone();
+            c2.add(Calendar.DAY_OF_MONTH, 1);
+            Candlestick candlestick = new Candlestick(c2, data[i][0], data[i][1],
+                    data[i][2], data[i][3], 1);
             drawCandle(g, sc, candlestick);
         }
     }

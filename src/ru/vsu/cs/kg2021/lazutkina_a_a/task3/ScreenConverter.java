@@ -21,6 +21,16 @@ public class ScreenConverter
         cy += delta.getY();
     }
 
+    public void moveCornerX(RealPoint delta)
+    {
+        cx += delta.getX();
+    }
+
+    public void changeScaleX(double scale)
+    {
+        realWidth *= scale;
+    }
+
     public void changeScale(double scale)
     {
         realWidth *= scale;

@@ -213,7 +213,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
             RealPoint p1 = sc.screenToReal(currPoint);
             RealPoint p2 = sc.screenToReal(prevPoint);
             RealPoint delta = p2.minus(p1);
-            sc.moveCorner(delta);
+            sc.moveCornerX(delta);
             prevPoint = currPoint;
         }
         repaint();
@@ -236,7 +236,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         {
             scale *= coef;
         }
-        sc.changeScale(scale);
+        sc.changeScaleX(scale);
         repaint();
     }
 }

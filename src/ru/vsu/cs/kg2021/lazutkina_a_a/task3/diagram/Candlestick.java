@@ -24,7 +24,7 @@ public class Candlestick
     private int width;
     private CandleType type;
 
-    public Candlestick(Date date, int open, int high, int low, int close, int width)
+/*    public Candlestick(Date date, int open, int high, int low, int close, int width)
     {
         if (close > open)
         {
@@ -43,9 +43,9 @@ public class Candlestick
         this.low = low;
         this.date = date;
         this.width = width;
-    }
+    }*/
 
-    public Candlestick(GregorianCalendar calendar, int open, int high, int low, int close, int width)
+    public Candlestick(GregorianCalendar calendar, int low, int open, int close, int high, int width)
     {
         if (close > open)
         {
@@ -66,7 +66,7 @@ public class Candlestick
         this.width = width;
     }
 
-    public Candlestick(int low, int open, int close, int high, int time, int width, ScreenConverter sc)
+ /*   public Candlestick(int low, int open, int close, int high, int time, int width, ScreenConverter sc)
     {
         if (close > open)
         {
@@ -85,7 +85,7 @@ public class Candlestick
         this.low = low;
         this.time = time;
         this.width = width;
-    }
+    }*/
 
     public int getWidth()
     {
