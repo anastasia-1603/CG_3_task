@@ -1,15 +1,6 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram;
 
-import ru.vsu.cs.kg2021.lazutkina_a_a.task3.Drawable;
-import ru.vsu.cs.kg2021.lazutkina_a_a.task3.RealPoint;
-import ru.vsu.cs.kg2021.lazutkina_a_a.task3.ScreenConverter;
-import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DrawService;
-import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Line;
-import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Rectangle;
-
-import java.awt.*;
-
-public class Candlestick
+public class Candle
 {
     private int high;
     private int low;
@@ -19,9 +10,8 @@ public class Candlestick
 
     private int width;
     private CandleType type;
-    private ScreenConverter sc;
 
-    public Candlestick(int low, int open, int close, int high, int time, int width, ScreenConverter sc)
+    public Candle(int low, int open, int close, int high, int time, int width)
     {
         if (close > open)
         {
@@ -39,7 +29,6 @@ public class Candlestick
         this.high = high;
         this.low = low;
         this.time = time;
-        this.sc = sc;
         this.width = width;
     }
 

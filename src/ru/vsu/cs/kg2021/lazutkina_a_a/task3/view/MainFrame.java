@@ -24,6 +24,7 @@ public class MainFrame extends JFrame
     {
         panelMain = new JPanel();
         drawPanel = new DrawPanel();
+        drawPanel.setSize(800, 600);
         initButtons();
         initPanelButtonsTime();
         initPanelButtonsPeriod();

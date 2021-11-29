@@ -1,7 +1,6 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3;
 
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.view.MainFrame;
-
 import javax.swing.*;
 
 public class Main

@@ -1,5 +1,4 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3;
-
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DataService;
 
 import java.util.ArrayList;
@@ -8,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Arrays.copyOfRange;
-
 
 public class Data
 {
@@ -31,12 +29,12 @@ public class Data
 
     public int[][] getMonthData()
     {
-        return copyOfRange(data, 330, 360);
+        return copyOfRange(data, data.length - 31, data.length);
     }
 
     public int[][] getWeekData()
     {
-        return copyOfRange(data, 353, 360);
+        return copyOfRange(data, data.length-7, data.length);
     }
 
 }
