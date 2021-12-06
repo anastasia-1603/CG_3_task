@@ -8,6 +8,29 @@ public class ArrayUtil
 {
     private final static Random random = new Random();
 
+    public static int[][] toInt2DArray(List<Integer[]> list)
+    {
+        return toPrimitive(list.toArray(new Integer[0][]));
+    }
+
+    public static List<Integer[]> readListIntegerArraysFromFile(String fileName)
+    {
+        List<Integer[]> dataList = new ArrayList<>();
+        try
+        {
+            String[] strings = readLinesFromFile(fileName);
+            for (String s : strings)
+            {
+                dataList.add(toIntegerArray(s));
+            }
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
     public static double[][] readDoubleArray2FromFile(String fileName)
     {
         try
@@ -41,12 +64,12 @@ public class ArrayUtil
         return doubleArray;
     }
 
-    public static Integer[] toIntegerArray(String[] array)
+    public static Integer[] toIntegerArray(String[] lines)
     {
-        Integer[] newArray = new Integer[array.length];
-        for (int i = 0; i < array.length; i++)
+        Integer[] newArray = new Integer[lines.length];
+        for (int i = 0; i < lines.length; i++)
         {
-            newArray[i] = Integer.valueOf(array[i]);
+            newArray[i] = Integer.valueOf(lines[i]);
         }
         return newArray;
     }
@@ -72,6 +95,7 @@ public class ArrayUtil
         }
         return list.toArray(new String[0][]);
     }
+
     public static String[] readLinesFromFile(String fileName) throws FileNotFoundException
     {
         List<String> lines;
@@ -136,19 +160,24 @@ public class ArrayUtil
 
     private static int[] toIntArray(String str)
     {
+        return toPrimitive(toIntegerArray(str));
+    }
+
+    private static Integer[] toIntegerArray(String str)
+    {
         Scanner scanner = new Scanner(str);
         scanner.useLocale(Locale.ROOT);
-        scanner.useDelimiter(",");
+        scanner.useDelimiter("(\\s|[,;])+");
         List<Integer> list = new ArrayList<>();
         while (scanner.hasNext())
         {
             list.add(scanner.nextInt());
         }
-        Integer[] arr = list.toArray(new Integer[0]);
-        return toPrimitive(arr);
+        return list.toArray(new Integer[0]);
+
     }
 
-    public static int[][] toPrimitive(Integer[][] arr) //todo util
+    public static int[][] toPrimitive(Integer[][] arr)
     {
         int[][] newArray = new int[arr.length][];
         for (int i = 0; i < arr.length; i++)

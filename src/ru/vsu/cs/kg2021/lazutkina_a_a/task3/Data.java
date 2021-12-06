@@ -1,26 +1,38 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3;
-import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DataService;
 
-import java.util.ArrayList;
-import java.util.Date;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DataService;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.utils.ArrayUtil;
+
+
 import java.util.List;
-import java.util.Map;
 
 import static java.util.Arrays.copyOfRange;
 
 public class Data
 {
     private int[][] data;
-   // private final Map<Date, Double>
 
-    private Map<Date, Integer[]> dataMap;
-    public Data(int min, int max)
+    private List<Integer[]> dataList;
+
+    public List<Integer[]> getDataList()
+    {
+        return dataList;
+    }
+
+    /*public Data(int min, int max)
     {
         DataService ds = new DataService();
-        dataMap = ds.dataToIntegerMap();
+        data = ds.fillData(data, min, max);
+    }*/
 
-        //ds.fillData(data, min, max);
+    public Data(String filename)
+    {
+        DataService ds = new DataService();
+        //data = ds.fillData(data, min, max);
+        dataList = ds.readIntegerData(filename);
+        data = ArrayUtil.toInt2DArray(dataList);
     }
+
 
     public int[][] getData()
     {
@@ -29,12 +41,12 @@ public class Data
 
     public int[][] getMonthData()
     {
-        return copyOfRange(data, data.length - 31, data.length);
+        return copyOfRange(data, data.length - 31, data.length - 1);
     }
 
     public int[][] getWeekData()
     {
-        return copyOfRange(data, data.length-7, data.length);
+        return copyOfRange(data, data.length - 8, data.length - 1);
     }
 
 }

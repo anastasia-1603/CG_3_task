@@ -3,6 +3,7 @@ package ru.vsu.cs.kg2021.lazutkina_a_a.task3.view;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.*;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DataService;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DrawService;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.utils.ArrayUtil;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.view.status.Period;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.view.status.Time;
 
@@ -13,15 +14,9 @@ import java.awt.image.BufferedImage;
 
 public class DrawPanel extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener
 {
-    private static final int MIN_VALUE = 0;
-    private static final int MAX_VALUE = 200;
-    private static final Data DATA = new Data(MIN_VALUE, MAX_VALUE);
+    private Data data = new Data("data/random_data.txt");
     private static final DrawService DRAW_SERVICE = new DrawService();
     private static final DataService DATA_SERVICE = new DataService();
-
-    public static final int[][] WEEK_DATA = DATA.getWeekData();
-    public static final int[][] MONTH_DATA = DATA.getMonthData();
-    public static final int[][] YEAR_DATA = DATA.getData();
 
     private Period period;
     private Time time;
@@ -30,12 +25,19 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 
     private int[][] currData;
 
+    private int max;
+    private int min;
+
     public DrawPanel()
     {
         setDefaultView();
         this.setSize(800, 600);
-        sc = new ScreenConverter(0, this.getHeight(), currData.length + 1, MAX_VALUE,
+        max = ArrayUtil.findMax(currData);
+        min = ArrayUtil.findMin(currData);
+        sc = new ScreenConverter(0, max + 1,
+                currData.length + 1, max - min + 2,
                 this.getWidth(), this.getHeight());
+
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
@@ -44,10 +46,9 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     @Override
     protected void paintComponent(Graphics origG)
     {
-
-
         sc.setScreenWidth(this.getWidth());
         sc.setScreenHeight(this.getHeight());
+
 
         setData();
         BufferedImage bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
@@ -66,8 +67,8 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 
     private void setDefaultView()
     {
-        this.currData = MONTH_DATA;
-        period = Period.MONTH;
+        this.currData = data.getData();
+        period = Period.YEAR;
         time = Time.DAY;
     }
 
@@ -94,6 +95,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     public void setCurrData(int[][] currData)
     {
         this.currData = currData;
+
         repaint();
     }
 
@@ -109,31 +111,28 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 
     public void setDataByDay()
     {
-        time = Time.DAY;
         switch (period)
         {
-            case WEEK -> setCurrData(WEEK_DATA);
-            case MONTH -> setCurrData(MONTH_DATA);
-            case YEAR -> setCurrData(YEAR_DATA);
+            case WEEK -> setCurrData(data.getWeekData());
+            case MONTH -> setCurrData(data.getMonthData());
+            case YEAR -> setCurrData(data.getData());
         }
     }
 
     public void setDataByWeek()
     {
-        time = Time.WEEK;
         switch (period)
         {
-            case MONTH -> setCurrData(DATA_SERVICE.selectDataByWeek(MONTH_DATA));
-            case YEAR -> setCurrData(DATA_SERVICE.selectDataByWeek(YEAR_DATA));
+            case MONTH -> setCurrData(DATA_SERVICE.selectDataByWeek(data.getMonthData()));
+            case YEAR -> setCurrData(DATA_SERVICE.selectDataByWeek(data.getData()));
         }
     }
 
     public void setDataByMonth()
     {
-        time = Time.MONTH;
         if (period == Period.YEAR)
         {
-            setCurrData(DATA_SERVICE.selectDataByMonth(YEAR_DATA));
+            setCurrData(DATA_SERVICE.selectDataByMonth(data.getData()));
         }
     }
 
@@ -142,10 +141,11 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     {
         if (e.getClickCount() == 2 && !e.isConsumed() && SwingUtilities.isLeftMouseButton(e)) {
             e.consume();
+
             sc.setCx(0);
-            sc.setCy(MAX_VALUE);
+            sc.setCy(max + 1);
             sc.setRealWidth(currData.length + 1);
-            sc.setRealHeight(MAX_VALUE);
+            sc.setRealHeight(max - min + 2);
             sc.setScreenWidth(this.getWidth());
             sc.setScreenHeight(this.getHeight());
             repaint();
@@ -193,7 +193,10 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
             RealPoint p1 = sc.screenToReal(currPoint);
             RealPoint p2 = sc.screenToReal(prevPoint);
             RealPoint delta = p2.minus(p1);
-            sc.moveCornerX(delta);
+            if (sc.getCx() + delta.getX() >= 0)
+            {
+                sc.moveCornerX(delta);
+            }
             prevPoint = currPoint;
         }
         repaint();
@@ -216,6 +219,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         {
             scale *= coef;
         }
+
         sc.changeScaleX(scale);
         repaint();
     }

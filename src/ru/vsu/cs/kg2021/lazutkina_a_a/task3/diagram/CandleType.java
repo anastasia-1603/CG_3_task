@@ -4,8 +4,8 @@ import java.awt.*;
 
 public enum CandleType
 {
-    DECREASING (Color.RED),
-    INCREASING (Color.BLUE);
+    DECREASING (new Color(255, 105, 105)),
+    INCREASING (new Color(87, 170, 127));
 
     public final Color color;
 
