@@ -8,17 +8,22 @@ public class ArrayUtil
 {
     private final static Random random = new Random();
 
+    public static double[][] toDouble2DArray(List<Double[]> list)
+    {
+        return toPrimitive(list.toArray(new Double[0][]));
+    }
+
     public static int[][] toInt2DArray(List<Integer[]> list)
     {
         return toPrimitive(list.toArray(new Integer[0][]));
     }
 
-    public static List<Integer[]> readListIntegerArraysFromFile(String fileName)
+    public static List<Integer[]> readListIntegerArraysFromFile(String filename)
     {
         List<Integer[]> dataList = new ArrayList<>();
         try
         {
-            String[] strings = readLinesFromFile(fileName);
+            String[] strings = readLinesFromFile(filename);
             for (String s : strings)
             {
                 dataList.add(toIntegerArray(s));
@@ -30,6 +35,25 @@ public class ArrayUtil
         }
         return dataList;
     }
+
+    public static List<Double[]> readListDoubleArraysFromFile(String filename)
+    {
+        List<Double[]> dataList = new ArrayList<>();
+        try
+        {
+            String[] strings = readLinesFromFile(filename);
+            for (String s : strings)
+            {
+                dataList.add(toDoubleArray(s));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
 
     public static double[][] readDoubleArray2FromFile(String fileName)
     {
@@ -62,6 +86,16 @@ public class ArrayUtil
             doubleArray[i] = Double.parseDouble(stringArray[i]);
         }
         return doubleArray;
+    }
+
+    public static double[] toPrimitiveDouble(String[] stringArray)
+    {
+        Double[] doubleArray = new Double[stringArray.length];
+        for (int i = 0; i < stringArray.length; i++)
+        {
+            doubleArray[i] = Double.parseDouble(stringArray[i]);
+        }
+        return toPrimitive(doubleArray);
     }
 
     public static Integer[] toIntegerArray(String[] lines)
@@ -115,12 +149,12 @@ public class ArrayUtil
         double[][] arr2 = new double[lines.length][];
         for (int r = 0; r < lines.length; r++)
         {
-            arr2[r] = toDoubleArray(lines[r]);
+            arr2[r] = toPrimitiveDoubleArray(lines[r]);
         }
         return arr2;
     }
 
-    private static double[] toDoubleArray(String str)
+    private static Double[] toDoubleArray(String str)
     {
         Scanner scanner = new Scanner(str);
         scanner.useLocale(Locale.ROOT);
@@ -130,8 +164,22 @@ public class ArrayUtil
         {
             list.add(scanner.nextDouble());
         }
-        Double[] arr = list.toArray(new Double[0]);
-        return toPrimitive(arr);
+        return list.toArray(new Double[0]);
+    }
+
+    private static double[] toPrimitiveDoubleArray(String str)
+    {
+        return toPrimitive(toDoubleArray(str));
+    }
+
+    private static double[][] toPrimitive(Double[][] array)
+    {
+        double[][] array2D = new double[array.length][];
+        for (int i = 0; i < array.length; i++)
+        {
+            array2D[i] = toPrimitive(array[i]);
+        }
+        return array2D;
     }
 
     private static double[] toPrimitive(Double[] arr)
@@ -199,6 +247,60 @@ public class ArrayUtil
             result[i] = arr[i];
         }
         return result;
+    }
+
+    public static double findMax(double[][] array)
+    {
+        double max = 0;
+        for (double[] data : array)
+        {
+            double localMax = findMax(data);
+            if (localMax > max)
+            {
+                max = localMax;
+            }
+        }
+        return max;
+    }
+
+    public static double findMax(double[] array)
+    {
+        double max = 0;
+        for (double j : array)
+        {
+            if (j > max)
+            {
+                max = j;
+            }
+        }
+        return max;
+    }
+
+    public static double findMin(double[] array)
+    {
+        double min = array[0];
+        for (double j : array)
+        {
+            if (j < min)
+            {
+                min = j;
+            }
+        }
+        return min;
+    }
+
+    public static double findMin(double[][] array)
+    {
+        double min = array[0][0];
+        for (double[] data : array)
+        {
+            double localMin = findMin(data);
+            if (localMin < min)
+            {
+                min = localMin;
+            }
+        }
+        return min;
     }
 
     public static int findMax(int[][] array)

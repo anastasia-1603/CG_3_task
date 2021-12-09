@@ -7,6 +7,7 @@ import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Rectangle;
 
 import java.awt.*;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 
@@ -67,10 +68,40 @@ public class DrawService implements LineDrawer
 
     }
 
+    public void drawCandle(Graphics2D g, ScreenConverter sc, CandleDouble candle, int width, int place)
+    {
+        double high = candle.getHigh();
+        double up = candle.getUp();
+        double low = candle.getLow();
+        double bottom = candle.getBottom();
+
+
+        Line upperShadow = new Line(new RealPoint(place, high), new RealPoint(place, up));
+        Rectangle realBody = new Rectangle(new RealPoint(place - width * 0.4, up),
+                new RealPoint(place + width * 0.4, bottom));
+        Line lowerShadow = new Line(new RealPoint(place, bottom), new RealPoint(place, low));
+
+        Color oldC = g.getColor();
+        if (candle.getType().color == Color.WHITE)
+        {
+            g.setColor(Color.BLACK);
+            drawLine(g, sc, upperShadow);
+            drawRect(g, sc, realBody);
+        }
+        else
+        {
+            g.setColor(candle.getType().color);
+            drawLine(g, sc, upperShadow);
+            fillRect(g, sc, realBody);
+        }
+        drawLine(g, sc, lowerShadow);
+        g.setColor(oldC);
+
+    }
+
     public void drawDiagram(int[][] data, ScreenConverter sc, Graphics2D g)
     {
         int num = data.length;
-        int interval = sc.getScreenHeight() / num;
         for (int i = 0; i < num; i++)
         {
             Candle candle = new Candle(data[i][0], data[i][1],
@@ -80,6 +111,17 @@ public class DrawService implements LineDrawer
             drawString(g, sc, candle.getTime()-1, 5,  String.valueOf(candle.getTime() - 1));
 
             //drawDashY(g, sc, 4, 2, sc.getScreenHeight()-candle.getLow());
+        }
+    }
+
+    public void drawDiagram(List<CandleDouble> candles, ScreenConverter sc, Graphics2D g)
+    {
+        int num = candles.size();
+        int width = 1;
+        int i = 0;
+        for (CandleDouble candle : candles)
+        {
+            drawCandle(g, sc, candle, width, i++ + width);
         }
     }
 

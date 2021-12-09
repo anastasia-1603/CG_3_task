@@ -3,7 +3,6 @@ package ru.vsu.cs.kg2021.lazutkina_a_a.task3;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DataService;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.utils.ArrayUtil;
 
-
 import java.util.List;
 
 import static java.util.Arrays.copyOfRange;
@@ -15,8 +14,7 @@ public class Data
     public Data(String filename)
     {
         DataService ds = new DataService();
-        List<Integer[]> dataList = ds.readIntegerData(filename);
-        data = ArrayUtil.toInt2DArray(dataList);
+        data = ds.readIntData(filename);
     }
 
     public int[][] getData()
