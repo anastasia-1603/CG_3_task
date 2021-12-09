@@ -1,5 +1,6 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3.service;
 
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram.Candle;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.utils.ArrayUtil;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.utils.DateUtils;
 

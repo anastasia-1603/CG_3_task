@@ -12,27 +12,12 @@ public class Data
 {
     private int[][] data;
 
-    private List<Integer[]> dataList;
-
-    public List<Integer[]> getDataList()
-    {
-        return dataList;
-    }
-
-    /*public Data(int min, int max)
-    {
-        DataService ds = new DataService();
-        data = ds.fillData(data, min, max);
-    }*/
-
     public Data(String filename)
     {
         DataService ds = new DataService();
-        //data = ds.fillData(data, min, max);
-        dataList = ds.readIntegerData(filename);
+        List<Integer[]> dataList = ds.readIntegerData(filename);
         data = ArrayUtil.toInt2DArray(dataList);
     }
-
 
     public int[][] getData()
     {

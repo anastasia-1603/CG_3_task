@@ -6,6 +6,9 @@ import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Line;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Rectangle;
 
 import java.awt.*;
+import java.util.GregorianCalendar;
+import java.util.Map;
+import java.util.SortedMap;
 
 public class DrawService implements LineDrawer
 {
@@ -52,15 +55,14 @@ public class DrawService implements LineDrawer
             g.setColor(Color.BLACK);
             drawLine(g, sc, upperShadow);
             drawRect(g, sc, realBody);
-            drawLine(g, sc, lowerShadow);
         }
         else
         {
             g.setColor(candle.getType().color);
             drawLine(g, sc, upperShadow);
             fillRect(g, sc, realBody);
-            drawLine(g, sc, lowerShadow);
         }
+        drawLine(g, sc, lowerShadow);
         g.setColor(oldC);
 
     }
