@@ -20,10 +20,10 @@ public class DateUtils {
         return format.parse(date);
     }
 
-    public static GregorianCalendar readCalendar(String date) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+  /*  public static GregorianCalendar readCalendar(String date, String pattern) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
         return dateToCalendar(format.parse(date));
-    }
+    }*/
 
     public static GregorianCalendar readCalendar(String date, String pattern) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat(pattern);

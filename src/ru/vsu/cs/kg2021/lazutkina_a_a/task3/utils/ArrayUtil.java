@@ -18,27 +18,7 @@ public class ArrayUtil
         return toPrimitive(list.toArray(new Integer[0][]));
     }
 
-/*    public static List<Integer[]> readListIntegerArraysFromFile(String filename)
-    {
-        List<Integer[]> dataList = new ArrayList<>();
-        try
-        {
-            String[] strings = readLinesFromFile(filename);
-            for (String s : strings)
-            {
-                dataList.add(toIntegerArray(s));
-            }
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-        return dataList;
-    }*/
-
-
-
-    public static List<Double[]> readListDoubleArraysFromFile(String filename)
+    public static List<Double[]> readListDoubleArraysFromFile(String filename, int from, int to)
     {
         List<Double[]> dataList = new ArrayList<>();
         String[][] lines = ArrayUtil.toString2DArray(filename);
@@ -46,7 +26,7 @@ public class ArrayUtil
         {
             for (String[] s : lines)
             {
-                String[] data = Arrays.copyOfRange(s, 1, s.length);
+                String[] data = Arrays.copyOfRange(s, from, to);
                 dataList.add(arrayStringToDouble(data));
             }
         }
@@ -123,12 +103,12 @@ public class ArrayUtil
         }
     }
 
-    public static String[][] splitStringsWithComma(String[] lines)
+    public static String[][] splitStringsWithComma(String[] lines) // todo переименовать
     {
         List<String[]> list = new ArrayList<>();
         for (String s : lines)
         {
-            list.add(s.split(","));
+            list.add(s.split("(\\s|[,;])+"));
         }
         return list.toArray(new String[0][]);
     }
@@ -161,7 +141,7 @@ public class ArrayUtil
     {
         Scanner scanner = new Scanner(str);
         scanner.useLocale(Locale.ROOT);
-        scanner.useDelimiter(",");
+        scanner.useDelimiter("(\\s|[,;])+");
         List<Double> list = new ArrayList<>();
         while (scanner.hasNext())
         {

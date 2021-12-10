@@ -23,17 +23,16 @@ public class MainFrame extends JFrame
     public MainFrame() throws HeadlessException
     {
         panelMain = new JPanel();
-        drawPanel = new DrawPanelDouble();
-        drawPanel.setSize(800, 600);
-        //initButtons();
-        //initPanelButtonsTime();
+        drawPanel = new DrawPanelDouble(this.getWidth(), this.getHeight());
+        initButtons();
+        initPanelButtonsTime();
         //initPanelButtonsPeriod();
 
         panelMain.setLayout(new BoxLayout(panelMain, BoxLayout.Y_AXIS));
         panelMain.setSize(this.getWidth(), this.getHeight());
         addComponentsToPanel();
-        //addListeners();
-        //changeButtons();
+        addListeners();
+        changeButtons();
 
         this.setTitle("Candlestick chart");
         this.add(panelMain);
@@ -70,7 +69,7 @@ public class MainFrame extends JFrame
         {
             drawPanel.setPeriod(Period.YEAR);
             changeView();
-        });
+        });*/
 
         buttonDay.addActionListener(e ->
         {
@@ -88,10 +87,10 @@ public class MainFrame extends JFrame
         {
             drawPanel.setTime(Time.MONTH);
             changeView();
-        });*/
+        });
     }
 
-    /*private void changeView()
+    private void changeView() //todo убрать метод
     {
         changeButtons();
         //drawPanel.changeCoordinatePlaneWidth();
@@ -99,8 +98,8 @@ public class MainFrame extends JFrame
 
     private void changeButtons()
     {
-        changeStatusOnSwitching();
-        changeEnabledButtons();
+        //changeStatusOnSwitching();
+        //changeEnabledButtons();
         //setColorPressedButtonsPeriod();
         setColorPressedButtonsTime();
         changeEnabledButtonsTime();
@@ -110,11 +109,26 @@ public class MainFrame extends JFrame
     {
         switch (drawPanel.getTime())
         {
-            case DAY -> buttonDay.setEnabled(false);
-            case WEEK -> buttonWeek.setEnabled(false);
-            case MONTH -> buttonMonth.setEnabled(false);
+            case DAY ->
+                    {
+                        buttonDay.setEnabled(false);
+                        buttonWeek.setEnabled(true);
+                        buttonMonth.setEnabled(true);
+                    }
+            case WEEK ->
+                    {
+                        buttonDay.setEnabled(true);
+                        buttonWeek.setEnabled(false);
+                        buttonMonth.setEnabled(true);
+                    }
+            case MONTH ->
+                    {
+                        buttonDay.setEnabled(true);
+                        buttonWeek.setEnabled(true);
+                        buttonMonth.setEnabled(false);
+                    }
         }
-    }*/
+    }
 
     /*private void changeStatusOnSwitching()
     {
@@ -127,6 +141,7 @@ public class MainFrame extends JFrame
 
     /*private void changeEnabledButtons()
     {
+
         switch (drawPanel.getPeriod())
         {
             case YEAR ->
@@ -184,7 +199,7 @@ public class MainFrame extends JFrame
         }
     }*/
 
-    /*private void setColorPressedButtonsTime()
+    private void setColorPressedButtonsTime()
     {
         switch (drawPanel.getTime())
         {
@@ -208,7 +223,7 @@ public class MainFrame extends JFrame
                     }
         }
     }
-*/
+/**/
     private void initPanelButtonsTime()
     {
         panelButtonsTime = new JPanel();
@@ -229,7 +244,7 @@ public class MainFrame extends JFrame
 
     private void addComponentsToPanel()
     {
-        //panelMain.add(panelButtonsTime);
+        panelMain.add(panelButtonsTime);
         panelMain.add(drawPanel);
         //panelMain.add(panelButtonsPeriod);
     }

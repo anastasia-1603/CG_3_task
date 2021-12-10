@@ -103,13 +103,39 @@ public class DataService {
         return newCandles;
     }
 
+    public List<CandleDouble> groupByMonth(List<GregorianCalendar> calendars, List<CandleDouble> candles) {
+
+        TreeMap<GregorianCalendar, CandleDouble> map = new TreeMap<>(zipToMap(calendars, candles));
+
+        List<GregorianCalendar> newCalendars = new ArrayList<>();
+        List<CandleDouble> newCandles = new ArrayList<>();
+
+        int month = calendars.get(0).get(Calendar.MONTH);
+        newCalendars.add(calendars.get(0));
+        List<CandleDouble> slice = new ArrayList<>();
+
+        int i = 1;
+        for (GregorianCalendar c: calendars) {
+            int currMonth = c.get(Calendar.MONTH);
+
+            if (currMonth != month) {
+                month = currMonth;
+                newCalendars.add(c);
+                newCandles.add(groupCandles(slice, i++));
+                slice.clear();
+            }
+            slice.add(map.get(c));
+        }
+        return newCandles;
+    }
+
     public CandleDouble groupCandles(List<CandleDouble> candles, int index)
     {
         double high = findMaxPrice(candles);
         double low = findMinPrice(candles);
         double open = candles.get(0).getOpen();
         double close = candles.get(candles.size()-1).getClose();
-        return new CandleDouble(low, open, close, high, index);
+        return new CandleDouble(open, high, low, close, index);
     }
 
     public <K, V> Map<K, V> zipToMap(List<K> keys, List<V> values) {
@@ -124,10 +150,6 @@ public class DataService {
         return ArrayUtil.toDouble2DArray(dataList);
     }
 
-/*    public int[][] readIntData(String filename) {
-        List<Integer[]> dataList = ArrayUtil.readListIntegerArraysFromFile(filename);
-        return ArrayUtil.toInt2DArray(dataList);
-    }*/
 
 /*    public Map<GregorianCalendar, CandleDouble> dataToMap(String filename) throws ParseException {
         Map<GregorianCalendar, CandleDouble> dataMap = new TreeMap<>();
@@ -149,15 +171,23 @@ public class DataService {
      * @return List<GregorianCalendar>
      * @throws ParseException
      */
-    public List<GregorianCalendar> readListOfDates(String filename, String format) throws ParseException {
-        String[][] lines = ArrayUtil.toString2DArray(filename);
+    public List<GregorianCalendar> readListOfDates(String filename, String format, int column) {
+
         List<GregorianCalendar> list = new ArrayList<>();
-        if (lines != null) {
-            for (String[] s: lines) {
-                list.add(DateUtils.readCalendar(s[0]));
+        try
+        {
+            String[][] lines = ArrayUtil.toString2DArray(filename);
+            if (lines != null) {
+                for (String[] s: lines) {
+                    list.add(DateUtils.readCalendar(s[column-1], format));
+                }
+            } else {
+                throw new NullPointerException("lines is null");
             }
-        } else {
-            throw new NullPointerException("lines is null");
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
         }
         return list;
     }
@@ -194,8 +224,8 @@ public class DataService {
         return candles;
     }*/
 
-    public List<CandleDouble> readListCandles(String filename) {
-        List<Double[]> list = ArrayUtil.readListDoubleArraysFromFile(filename);
+    public List<CandleDouble> readListCandles(String filename, int from, int to) {
+        List<Double[]> list = ArrayUtil.readListDoubleArraysFromFile(filename, from, to);
         List<CandleDouble> candles = new ArrayList<>();
         int index = 1;
         for (Double[] array: list) {

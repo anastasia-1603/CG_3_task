@@ -11,7 +11,7 @@ public class CandleDouble
     private int index;
     private CandleType type;
 
-    public CandleDouble(double low, double open, double close, double high, int index)
+    public CandleDouble(double open, double high, double low, double close, int index)
     {
         if (close > open)
         {

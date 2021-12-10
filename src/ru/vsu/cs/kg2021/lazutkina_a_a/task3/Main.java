@@ -17,8 +17,6 @@ public class Main
         frame.setSize(800, 600);
         frame.setVisible(true);
 
-        //todo index 0 убрать в drawPanel
-
         /*DataService ds = new DataService();
         List<GregorianCalendar> dates = ds.readListOfDates("data/USDCB_161125_211125.txt", "yyyyMMdd");
 
