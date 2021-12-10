@@ -2,14 +2,16 @@ package ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram;
 
 public class CandleDouble
 {
+    private double close;
     private double high;
     private double low;
     private double bottom;
     private double up;
-
+    private double open;
+    private int index;
     private CandleType type;
 
-    public CandleDouble(double low, double open, double close, double high)
+    public CandleDouble(double low, double open, double close, double high, int index)
     {
         if (close > open)
         {
@@ -24,8 +26,19 @@ public class CandleDouble
             bottom = close;
         }
 
+        this.open = open;
+        this.close = close;
+        this.index = index;
         this.high = high;
         this.low = low;
+    }
+
+    public double getClose() {
+        return close;
+    }
+
+    public double getOpen() {
+        return open;
     }
 
     public double getHigh()

@@ -1,3 +1,4 @@
+/*
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3.view;
 
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.*;
@@ -224,3 +225,4 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         repaint();
     }
 }
+*/

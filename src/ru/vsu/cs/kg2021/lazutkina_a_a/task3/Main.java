@@ -1,34 +1,43 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3;
 
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram.CandleDouble;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.service.DataService;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.utils.DateUtils;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.view.MainFrame;
 import javax.swing.*;
-import java.util.Arrays;
-import java.util.List;
+import java.text.ParseException;
+import java.util.*;
+
 
 public class Main
 {
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws ParseException {
         MainFrame frame = new MainFrame();
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setSize(800, 600);
         frame.setVisible(true);
+
+        //todo index 0 убрать в drawPanel
+
         /*DataService ds = new DataService();
-        double[][] arr = ds.readData();
-        String[][] strings = ds.readDataInString();
-        for (String[] s : strings)
+        List<GregorianCalendar> dates = ds.readListOfDates("data/USDCB_161125_211125.txt", "yyyyMMdd");
+
+        List<CandleDouble> candles = ds.readListCandles("data/USDCB_161125_211125.txt");
+
+        for (int i = 0; i < dates.size(); i++)
         {
-            System.out.println(Arrays.toString(s));
+            CandleDouble c = candles.get(i);
+            System.out.println(DateUtils.toString(dates.get(i), "yyyy.MM.dd") + " " + c.getHigh() + " " + c.getLow());
+
         }
-        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
-        Map<Date, int[]> dataMap = ds.dataToIntMap();
-        for (Date date : dataMap.keySet())
+        System.out.println("weeks");
+
+        TreeMap<GregorianCalendar, CandleDouble> map = ds.groupByWeek(dates, candles);
+        for (Map.Entry<GregorianCalendar, CandleDouble> e : map.entrySet())
         {
-            System.out.print(format.format(date));
-            System.out.print(Arrays.toString(dataMap.get(date)));
-            System.out.println();
+            System.out.println(DateUtils.toString(e.getKey(), "yyyy.MM.dd") + " " + e.getValue().getHigh()
+                    + " " + e.getValue().getLow() + " " + e.getValue().getClose() + " " +  e.getValue().getOpen());
         }
-        System.out.println(dataMap);*/
+*/
     }
 }

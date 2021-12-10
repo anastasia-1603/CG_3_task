@@ -7,6 +7,14 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class DateUtils {
+
+    public static String toString(GregorianCalendar c, String pattern)
+    {
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        Date date = c.getTime();
+        return format.format(date);
+    }
+
     public static Date readDate(String date) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         return format.parse(date);

@@ -1,3 +1,4 @@
+/*
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram;
 
 public class Candle
@@ -72,3 +73,4 @@ public class Candle
         return type;
     }
 }
+*/

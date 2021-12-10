@@ -18,7 +18,7 @@ public class ArrayUtil
         return toPrimitive(list.toArray(new Integer[0][]));
     }
 
-    public static List<Integer[]> readListIntegerArraysFromFile(String filename)
+/*    public static List<Integer[]> readListIntegerArraysFromFile(String filename)
     {
         List<Integer[]> dataList = new ArrayList<>();
         try
@@ -34,28 +34,31 @@ public class ArrayUtil
             e.printStackTrace();
         }
         return dataList;
-    }
+    }*/
+
+
 
     public static List<Double[]> readListDoubleArraysFromFile(String filename)
     {
         List<Double[]> dataList = new ArrayList<>();
-        try
+        String[][] lines = ArrayUtil.toString2DArray(filename);
+        if (lines != null)
         {
-            String[] strings = readLinesFromFile(filename);
-            for (String s : strings)
+            for (String[] s : lines)
             {
-                dataList.add(toDoubleArray(s));
+                String[] data = Arrays.copyOfRange(s, 1, s.length);
+                dataList.add(arrayStringToDouble(data));
             }
         }
-        catch (Exception e)
+        else
         {
-            e.printStackTrace();
+            throw new NullPointerException("lines is null");
         }
         return dataList;
     }
 
 
-    public static double[][] readDoubleArray2FromFile(String fileName)
+/*    public static double[][] readDoubleArray2FromFile(String fileName)
     {
         try
         {
@@ -65,9 +68,9 @@ public class ArrayUtil
         {
             return null;
         }
-    }
+    }*/
 
-    public static int[] castDoubleArrayToInt(Double[] array)
+/*    public static int[] castDoubleArrayToInt(Double[] array)
     {
         double[] doubleArr = toPrimitive(array);
         int[] intArray = new int[array.length];
@@ -76,7 +79,7 @@ public class ArrayUtil
             intArray[i] = (int) doubleArr[i];
         }
         return intArray;
-    }
+    }*/
 
     public static Double[] arrayStringToDouble(String[] stringArray)
     {
@@ -98,7 +101,7 @@ public class ArrayUtil
         return toPrimitive(doubleArray);
     }
 
-    public static Integer[] toIntegerArray(String[] lines)
+/*    public static Integer[] toIntegerArray(String[] lines)
     {
         Integer[] newArray = new Integer[lines.length];
         for (int i = 0; i < lines.length; i++)
@@ -106,7 +109,7 @@ public class ArrayUtil
             newArray[i] = Integer.valueOf(lines[i]);
         }
         return newArray;
-    }
+    }*/
 
     public static String[][] toString2DArray(String filename) //todo rename
     {
@@ -144,7 +147,7 @@ public class ArrayUtil
         return lines.toArray(new String[0]);
     }
 
-    public static double[][] toDoubleArray2(String[] lines)
+/*    public static double[][] toDoubleArray2(String[] lines)
     {
         double[][] arr2 = new double[lines.length][];
         for (int r = 0; r < lines.length; r++)
@@ -152,7 +155,7 @@ public class ArrayUtil
             arr2[r] = toPrimitiveDoubleArray(lines[r]);
         }
         return arr2;
-    }
+    }*/
 
     private static Double[] toDoubleArray(String str)
     {
@@ -167,10 +170,10 @@ public class ArrayUtil
         return list.toArray(new Double[0]);
     }
 
-    private static double[] toPrimitiveDoubleArray(String str)
+/*    private static double[] toPrimitiveDoubleArray(String str)
     {
         return toPrimitive(toDoubleArray(str));
-    }
+    }*/
 
     private static double[][] toPrimitive(Double[][] array)
     {
@@ -196,7 +199,7 @@ public class ArrayUtil
         return result;
     }
 
-    private static int[][] toIntArray2D(String[] lines)
+/*    private static int[][] toIntArray2D(String[] lines)
     {
         int[][] arr2 = new int[lines.length][];
         for (int r = 0; r < lines.length; r++)
@@ -204,14 +207,14 @@ public class ArrayUtil
             arr2[r] = toIntArray(lines[r]);
         }
         return arr2;
-    }
+    }*/
 
-    private static int[] toIntArray(String str)
+/*    private static int[] toIntArray(String str)
     {
         return toPrimitive(toIntegerArray(str));
-    }
+    }*/
 
-    private static Integer[] toIntegerArray(String str)
+/*    private static Integer[] toIntegerArray(String str)
     {
         Scanner scanner = new Scanner(str);
         scanner.useLocale(Locale.ROOT);
@@ -222,8 +225,7 @@ public class ArrayUtil
             list.add(scanner.nextInt());
         }
         return list.toArray(new Integer[0]);
-
-    }
+    }*/
 
     public static int[][] toPrimitive(Integer[][] arr)
     {
@@ -249,7 +251,7 @@ public class ArrayUtil
         return result;
     }
 
-    public static double findMax(double[][] array)
+   /* public static double findMax(double[][] array)
     {
         double max = 0;
         for (double[] data : array)
@@ -355,7 +357,7 @@ public class ArrayUtil
             }
         }
         return min;
-    }
+    }*/
 
     public static int random(int min, int max)
     {

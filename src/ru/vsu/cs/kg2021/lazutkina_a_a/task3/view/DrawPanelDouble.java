@@ -17,32 +17,24 @@ import java.util.List;
 
 public class DrawPanelDouble extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener {
 
-   // private DataDouble data = new DataDouble("data/random_data.txt");
-    private static final String FILENAME = "data/random_data.txt";
+    private static final String FILENAME = "data/USDCB_161125_211125.txt";
     private List<GregorianCalendar> dates;
     private List<CandleDouble> candles;
     private static final DrawService DRAW_SERVICE = new DrawService();
     private static final DataService DATA_SERVICE = new DataService();
 
-    private Period period;
+    //private Period period;
     private Time time;
 
     private ScreenConverter sc;
 
-    private double[][] currData;
+    private List<CandleDouble> currData;
 
     private double max;
     private double min;
 
     public DrawPanelDouble()
     {
-       // setDefaultView();
-        this.setSize(800, 600);
-        max = ArrayUtil.findMax(currData);
-        min = ArrayUtil.findMin(currData);
-        sc = new ScreenConverter(0, max + 1,
-                currData.length + 1, max - min + 2,
-                this.getWidth(), this.getHeight());
 
         try
         {
@@ -53,6 +45,14 @@ public class DrawPanelDouble extends JPanel implements MouseListener, MouseMotio
         {
             e.printStackTrace();
         }
+        setDefaultView();
+        this.setSize(800, 600);
+        max = DATA_SERVICE.findMaxPrice(currData);
+        min = DATA_SERVICE.findMinPrice(currData);
+        sc = new ScreenConverter(0, max + 1,
+                currData.size() + 1, max - min + 2,
+                this.getWidth(), this.getHeight());
+
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
@@ -64,8 +64,9 @@ public class DrawPanelDouble extends JPanel implements MouseListener, MouseMotio
         sc.setScreenWidth(this.getWidth());
         sc.setScreenHeight(this.getHeight());
 
-
         //setData();
+        sc.setCy(max+1);
+        sc.setRealHeight(max - min + 2);
         BufferedImage bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g = bi.createGraphics();
         g.setColor(Color.WHITE);
@@ -73,21 +74,20 @@ public class DrawPanelDouble extends JPanel implements MouseListener, MouseMotio
         g.setColor(Color.BLACK);
         g.setStroke(new BasicStroke(2));
 
-        DRAW_SERVICE.drawDiagram(candles, sc, g);
+        DRAW_SERVICE.drawDiagram(currData, sc, g);
         DRAW_SERVICE.drawCoordinatePlane(g, 3, this.getHeight()-3, this.getWidth(), this.getHeight());
 
         origG.drawImage(bi, 0, 0, null);
         g.dispose();
     }
 
-    /*private void setDefaultView()
+    private void setDefaultView()
     {
-       // this.currData = data.getData();
-        period = Period.YEAR;
+        currData = DATA_SERVICE.groupByWeek(dates, candles);
         time = Time.DAY;
     }
 
-    public Period getPeriod()
+    /*public Period getPeriod()
     {
         return period;
     }
@@ -95,7 +95,7 @@ public class DrawPanelDouble extends JPanel implements MouseListener, MouseMotio
     public void setPeriod(Period period)
     {
         this.period = period;
-    }
+    }*/
 
     public Time getTime()
     {
@@ -107,14 +107,20 @@ public class DrawPanelDouble extends JPanel implements MouseListener, MouseMotio
         this.time = time;
     }
 
- *//*   public void setCurrData(int[][] currData)
+    public void setCurrView()
     {
-        this.currData = currData;
+        double realRightestX = sc.screenXtoRealX(sc.getScreenWidth());
+        double realLeftX = sc.screenXtoRealX(0);
+        if (realRightestX < candles.size() && realLeftX > 0)
+        {
+            List<CandleDouble> currData = candles.subList((int)realLeftX, (int)realRightestX-1);
+            max = DATA_SERVICE.findMaxPrice(currData);
+            min = DATA_SERVICE.findMinPrice(currData);
+        }
+    }
 
-        repaint();
-    }*//*
 
-    public void setData()
+/*    public void setData()
     {
         switch (time)
         {
@@ -122,9 +128,19 @@ public class DrawPanelDouble extends JPanel implements MouseListener, MouseMotio
             case WEEK -> setDataByWeek();
             case MONTH -> setDataByMonth();
         }
+    }*/
+
+
+    private void groupDataByDay()
+    {
+        currData = candles;
     }
 
-    public void setDataByDay()
+    private void groupDataByWeek()
+    {
+
+    }
+  /*  public void setDataByDay()
     {
         switch (period)
         {
@@ -159,7 +175,7 @@ public class DrawPanelDouble extends JPanel implements MouseListener, MouseMotio
 
             sc.setCx(0);
             sc.setCy(max + 1);
-            sc.setRealWidth(currData.length + 1);
+            sc.setRealWidth(currData.size() + 1);
             sc.setRealHeight(max - min + 2);
             sc.setScreenWidth(this.getWidth());
             sc.setScreenHeight(this.getHeight());
@@ -234,8 +250,8 @@ public class DrawPanelDouble extends JPanel implements MouseListener, MouseMotio
         {
             scale *= coef;
         }
-
         sc.changeScaleX(scale);
+        setCurrView();
         repaint();
     }
 }

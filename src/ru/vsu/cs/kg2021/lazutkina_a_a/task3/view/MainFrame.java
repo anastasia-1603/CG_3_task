@@ -9,31 +9,31 @@ import java.awt.*;
 public class MainFrame extends JFrame
 {
     private JPanel panelMain;
-    private DrawPanel drawPanel;
+    private DrawPanelDouble drawPanel;
     private JButton buttonDay;
     private JButton buttonWeek;
     private JButton buttonMonth;
 
-    private JButton buttonWeekPeriod;
+    /*private JButton buttonWeekPeriod;
     private JButton buttonMonthPeriod;
-    private JButton buttonYearPeriod;
+    private JButton buttonYearPeriod;*/
     private JPanel panelButtonsTime;
-    private JPanel panelButtonsPeriod;
+    //private JPanel panelButtonsPeriod;
 
     public MainFrame() throws HeadlessException
     {
         panelMain = new JPanel();
-        drawPanel = new DrawPanel();
+        drawPanel = new DrawPanelDouble();
         drawPanel.setSize(800, 600);
-        initButtons();
-        initPanelButtonsTime();
-        initPanelButtonsPeriod();
+        //initButtons();
+        //initPanelButtonsTime();
+        //initPanelButtonsPeriod();
 
         panelMain.setLayout(new BoxLayout(panelMain, BoxLayout.Y_AXIS));
         panelMain.setSize(this.getWidth(), this.getHeight());
         addComponentsToPanel();
-        addListeners();
-        changeButtons();
+        //addListeners();
+        //changeButtons();
 
         this.setTitle("Candlestick chart");
         this.add(panelMain);
@@ -47,14 +47,14 @@ public class MainFrame extends JFrame
         buttonWeek = new JButton("Week");
         buttonMonth = new JButton("Month");
 
-        buttonWeekPeriod = new JButton("Week");
+       /* buttonWeekPeriod = new JButton("Week");
         buttonMonthPeriod = new JButton("Month");
-        buttonYearPeriod = new JButton("Year");
+        buttonYearPeriod = new JButton("Year");*/
     }
 
     private void addListeners()
     {
-        buttonWeekPeriod.addActionListener(e ->
+        /*buttonWeekPeriod.addActionListener(e ->
         {
             drawPanel.setPeriod(Period.WEEK);
             changeView();
@@ -88,10 +88,10 @@ public class MainFrame extends JFrame
         {
             drawPanel.setTime(Time.MONTH);
             changeView();
-        });
+        });*/
     }
 
-    private void changeView()
+    /*private void changeView()
     {
         changeButtons();
         //drawPanel.changeCoordinatePlaneWidth();
@@ -101,7 +101,7 @@ public class MainFrame extends JFrame
     {
         changeStatusOnSwitching();
         changeEnabledButtons();
-        setColorPressedButtonsPeriod();
+        //setColorPressedButtonsPeriod();
         setColorPressedButtonsTime();
         changeEnabledButtonsTime();
     }
@@ -114,18 +114,18 @@ public class MainFrame extends JFrame
             case WEEK -> buttonWeek.setEnabled(false);
             case MONTH -> buttonMonth.setEnabled(false);
         }
-    }
+    }*/
 
-    private void changeStatusOnSwitching()
+    /*private void changeStatusOnSwitching()
     {
         if ((drawPanel.getPeriod() == Period.WEEK && drawPanel.getTime() != Time.DAY) ||
                 (drawPanel.getPeriod() == Period.MONTH && drawPanel.getTime() == Time.MONTH))
         {
             drawPanel.setTime(Time.DAY);
         }
-    }
+    }*/
 
-    private void changeEnabledButtons()
+    /*private void changeEnabledButtons()
     {
         switch (drawPanel.getPeriod())
         {
@@ -157,9 +157,9 @@ public class MainFrame extends JFrame
                         buttonYearPeriod.setEnabled(true);
                     }
         }
-    }
+    }*/
 
-    private void setColorPressedButtonsPeriod()
+   /* private void setColorPressedButtonsPeriod()
     {
         switch (drawPanel.getPeriod())
         {
@@ -182,9 +182,9 @@ public class MainFrame extends JFrame
                         buttonYearPeriod.setBackground(Color.BLUE);
                     }
         }
-    }
+    }*/
 
-    private void setColorPressedButtonsTime()
+    /*private void setColorPressedButtonsTime()
     {
         switch (drawPanel.getTime())
         {
@@ -208,7 +208,7 @@ public class MainFrame extends JFrame
                     }
         }
     }
-
+*/
     private void initPanelButtonsTime()
     {
         panelButtonsTime = new JPanel();
@@ -218,19 +218,19 @@ public class MainFrame extends JFrame
         panelButtonsTime.add(buttonMonth);
     }
 
-    private void initPanelButtonsPeriod()
+   /* private void initPanelButtonsPeriod()
     {
         panelButtonsPeriod = new JPanel();
         panelButtonsPeriod.setLayout(new BoxLayout(panelButtonsPeriod, BoxLayout.X_AXIS));
         panelButtonsPeriod.add(buttonWeekPeriod);
         panelButtonsPeriod.add(buttonMonthPeriod);
         panelButtonsPeriod.add(buttonYearPeriod);
-    }
+    }*/
 
     private void addComponentsToPanel()
     {
-        panelMain.add(panelButtonsTime);
+        //panelMain.add(panelButtonsTime);
         panelMain.add(drawPanel);
-        panelMain.add(panelButtonsPeriod);
+        //panelMain.add(panelButtonsPeriod);
     }
 }

@@ -28,6 +28,8 @@ public class DrawService implements LineDrawer
                 Math.abs(p2.getColumn() - p1.getColumn()), Math.abs(p2.getRow() - p1.getRow()));
     }
 
+
+
     public void fillRect(Graphics2D g, ScreenConverter sc, Rectangle rect)
     {
         ScreenPoint p1 = sc.realToScreen(rect.getLeftUpperPoint());
@@ -36,7 +38,7 @@ public class DrawService implements LineDrawer
                 Math.abs(p2.getColumn() - p1.getColumn()), Math.abs(p2.getRow() - p1.getRow()));
     }
 
-    public void drawCandle(Graphics2D g, ScreenConverter sc, Candle candle)
+    /*public void drawCandle(Graphics2D g, ScreenConverter sc, Candle candle)
     {
         int high = candle.getHigh();
         int up = candle.getUp();
@@ -65,8 +67,7 @@ public class DrawService implements LineDrawer
         }
         drawLine(g, sc, lowerShadow);
         g.setColor(oldC);
-
-    }
+    }*/
 
     public void drawCandle(Graphics2D g, ScreenConverter sc, CandleDouble candle, int width, int place)
     {
@@ -99,7 +100,7 @@ public class DrawService implements LineDrawer
 
     }
 
-    public void drawDiagram(int[][] data, ScreenConverter sc, Graphics2D g)
+    /*public void drawDiagram(int[][] data, ScreenConverter sc, Graphics2D g)
     {
         int num = data.length;
         for (int i = 0; i < num; i++)
@@ -112,16 +113,15 @@ public class DrawService implements LineDrawer
 
             //drawDashY(g, sc, 4, 2, sc.getScreenHeight()-candle.getLow());
         }
-    }
+    }*/
 
     public void drawDiagram(List<CandleDouble> candles, ScreenConverter sc, Graphics2D g)
     {
-        int num = candles.size();
         int width = 1;
-        int i = 0;
+        int i = 1;
         for (CandleDouble candle : candles)
         {
-            drawCandle(g, sc, candle, width, i++ + width);
+            drawCandle(g, sc, candle, width, i++);
         }
     }
 
