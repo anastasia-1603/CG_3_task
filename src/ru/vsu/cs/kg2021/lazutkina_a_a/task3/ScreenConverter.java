@@ -51,9 +51,14 @@ public class ScreenConverter
         return new RealPoint(x, y);
     }
 
-    public double realXtoScreenX(double x)
+    public int realXtoScreenX(double x)
     {
-        return (x - cx) / realWidth * screenWidth;
+        return (int)((x - cx) / realWidth * screenWidth);
+    }
+
+    public int realYtoScreenY(double y)
+    {
+        return (int)((cy - y) / realHeight * screenHeight);
     }
 
     public double screenXtoRealX(int x)

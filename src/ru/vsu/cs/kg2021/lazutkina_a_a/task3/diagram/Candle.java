@@ -1,76 +1,59 @@
-/*
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram;
 
-public class Candle
-{
-    private int high;
-    private int low;
-    private int time;
-    private int bottom;
-    private int up;
-
-    private int width;
+public class Candle {
+    private double close;
+    private double high;
+    private double low;
+    private double bottom;
+    private double up;
+    private double open;
+    private int index;
     private CandleType type;
 
-    public Candle(int low, int open, int close, int high, int time, int width)
-    {
-        if (close > open)
-        {
+    public Candle(double open, double high, double low, double close, int index) {
+
+        if (close > open) {
             type = CandleType.INCREASING;
             up = close;
             bottom = open;
-        }
-        else
-        {
+        } else {
             type = CandleType.DECREASING;
             up = open;
             bottom = close;
         }
 
+        this.open = open;
+        this.close = close;
+        this.index = index;
         this.high = high;
         this.low = low;
-        this.time = time;
-        this.width = width;
     }
 
-    public int getWidth()
-    {
-        return width;
+    public double getClose() {
+        return close;
     }
 
-    public int getHigh()
-    {
+    public double getOpen() {
+        return open;
+    }
+
+    public double getHigh() {
         return high;
     }
 
-    public int getLow()
-    {
+    public double getLow() {
         return low;
     }
 
-    public int getTime()
-    {
-        return time;
-    }
-
-    public int getBottom()
-    {
+    public double getBottom() {
         return bottom;
     }
 
-    public int getUp()
-    {
+    public double getUp() {
         return up;
     }
 
-    public void setUp(int up)
-    {
-        this.up = up;
-    }
-
-    public CandleType getType()
-    {
+    public CandleType getType() {
         return type;
     }
 }
-*/
