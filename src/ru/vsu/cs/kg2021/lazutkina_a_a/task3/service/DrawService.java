@@ -7,7 +7,6 @@ import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Rectangle;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.utils.DateUtils;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
 
 public class DrawService implements LineDrawer {
@@ -38,7 +37,6 @@ public class DrawService implements LineDrawer {
         double low = candle.getLow();
         double bottom = candle.getBottom();
 
-
         Line upperShadow = new Line(new RealPoint(place, high), new RealPoint(place, up));
         Rectangle realBody = new Rectangle(new RealPoint(place - width * 0.4, up),
                 new RealPoint(place + width * 0.4, bottom));
@@ -59,31 +57,77 @@ public class DrawService implements LineDrawer {
 
     }
 
-    public void drawDiagram(Data data, ScreenConverter sc, Graphics2D g) {
-        int i = 0;
-        for (Map.Entry<GregorianCalendar, Candle> entry: data.getMap().entrySet()) {
-            i++;
-            drawCandle(g, sc, entry.getValue(), 1, i);
-            drawDashX(g, sc, 4, i, sc.getScreenHeight());
-            drawString(g, sc, i, sc.getScreenHeight() - 4, DateUtils.toString(entry.getKey(), "dd.MM.yyyy"));
+    public void drawDiagram(List<Candle> candles, ScreenConverter sc, Graphics2D g) {
+        int x = (int) sc.screenToReal(new ScreenPoint(0, 0)).getX();
+        for (int i = x + 1; i < x + sc.getRealWidth(); i++) {
+            if (i < candles.size() && i >= 0) {
+                drawCandle(g, sc, candles.get(i), 1, i);
+                /*drawDashX(g, sc, 4, i, sc.getScreenHeight() - 20);*/
+
+                /*drawString(g, sc, i, sc.getScreenHeight() - 4,
+                        DateUtils.toString(candles.get(i).getDate(), "dd.MM.yyyy"));*/
+            }
         }
 
+        groupDates(g, sc, candles);
+
         DataService ds = new DataService();
-        double min = ds.findMinPrice(data.getCandles());
-        double max = ds.findMaxPrice(data.getCandles());
+        double min = ds.findMinPrice(candles);
+        double max = ds.findMaxPrice(candles);
         double interval = (max - min) / sc.getRealHeight();
 
-        for (double d = min; d <= max; d+=interval)
-        {
-            drawDashY(g, sc, 4, 4, d);
-            drawPrice(g, sc, 4, d, d);
+        for (double d = min; d <= max; d += interval) {
+            drawDashY(g, sc, 4, sc.getScreenWidth() - 45, d);
+            drawPrice(g, sc, sc.getScreenWidth() - 38, d, d);
         }
     }
 
-    public void drawCoordinatePlane(Graphics2D g, int x, int y, int width, int height) {
+    private void groupDates(Graphics2D g, ScreenConverter sc, List<Candle> candles)
+    {
+        if (sc.getRealWidth() >= 120)
+        {
+            drawDates(g, sc, candles, "yyyy");
+        }
+        else if (sc.getRealWidth() >= 60)
+        {
+            drawDates(g, sc, candles, "MMM");
+        }
+        else if (sc.getRealWidth() >= 20)
+        {
+            drawDates(g, sc, candles, "WW");
+        }
+        else
+        {
+            drawDates(g, sc, candles, "dd.MM.yyyy");
+        }
+
+    }
+
+    private void drawDates(Graphics2D g, ScreenConverter sc, List<Candle> candles, String pattern)
+    {
+        String date = DateUtils.toString(candles.get(0).getDate(), pattern);
+        drawString(g, sc, 1, sc.getScreenHeight() - 4, date);
+        for (int i = 0; i < candles.size(); i++)
+        {
+            String currDate = DateUtils.toString(candles.get(i).getDate(), pattern);
+            if (!currDate.equals(date))
+            {
+                date = currDate;
+                drawDashX(g, sc, 4, i, sc.getScreenHeight() - 20);
+                drawString(g, sc, i + 1, sc.getScreenHeight() - 4, date);
+            }
+        }
+    }
+
+    public void drawCoordinatePlane(Graphics2D g, ScreenConverter sc) {
         BasicStroke oldStroke = (BasicStroke) g.getStroke();
         g.setStroke(new BasicStroke(3));
-        g.drawLine(x, y, width, y);
+        int width = sc.getScreenWidth();
+        int height = sc.getScreenHeight();
+        int x = width - 40;
+        int y = height - 20;
+
+        g.drawLine(x, y, -width, y);
         g.drawLine(x, y, x, -height);
         g.setStroke(oldStroke);
     }
@@ -108,5 +152,4 @@ public class DrawService implements LineDrawer {
         String text = String.format("%.2f", price);
         g.drawString(text, screenX, screenY);
     }
-
 }

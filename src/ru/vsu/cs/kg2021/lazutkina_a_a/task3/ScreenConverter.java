@@ -28,6 +28,13 @@ public class ScreenConverter
 
     public void changeScaleX(double scale)
     {
+        double deltaX = (realWidth - realWidth * scale);
+
+      /*  if (cx + realWidth < realWidth + 3)
+        {
+            sc.changeScaleX(scale);
+        }*/
+        cx += deltaX;
         realWidth *= scale;
     }
 

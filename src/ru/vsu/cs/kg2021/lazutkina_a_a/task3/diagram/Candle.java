@@ -1,16 +1,20 @@
 package ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram;
 
-public class Candle {
-    private double close;
-    private double high;
-    private double low;
-    private double bottom;
-    private double up;
-    private double open;
-    private int index;
-    private CandleType type;
+import java.util.GregorianCalendar;
 
-    public Candle(double open, double high, double low, double close, int index) {
+public class Candle implements Comparable<Candle> {
+    private final double close;
+    private final double high;
+    private final double low;
+    private final double open;
+    private final GregorianCalendar date;
+
+    private final CandleType type;
+
+    private final double bottom;
+    private final double up;
+
+    public Candle(double open, double high, double low, double close, GregorianCalendar date) {
 
         if (close > open) {
             type = CandleType.INCREASING;
@@ -24,7 +28,7 @@ public class Candle {
 
         this.open = open;
         this.close = close;
-        this.index = index;
+        this.date = date;
         this.high = high;
         this.low = low;
     }
@@ -55,5 +59,14 @@ public class Candle {
 
     public CandleType getType() {
         return type;
+    }
+
+    public GregorianCalendar getDate() {
+        return date;
+    }
+
+    @Override
+    public int compareTo(Candle o) {
+        return date.compareTo(o.date);
     }
 }

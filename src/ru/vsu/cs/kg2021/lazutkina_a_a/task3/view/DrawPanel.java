@@ -11,40 +11,39 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class DrawPanel extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener {
 
-    private static final String FILENAME = "data/data.txt";
-    //private List<GregorianCalendar> dates;
-    //private List<Candle> candles;
     private static final DrawService DRAW_SERVICE = new DrawService();
     private static final DataService DATA_SERVICE = new DataService();
 
-    private final Data data;
+    private static final String FILENAME = "data/data.txt";
+    private final List<Candle> candles;
 
     private Time time;
 
     private ScreenConverter sc;
 
-    private Data currData;
-
+    private List<Candle> currCandles;
     private double max;
     private double min;
+
 
     public DrawPanel(int width, int height)
     {
         this.setSize(width, height);
-        data = new Data(FILENAME, "dd.MM.yyyy", 5, 0, 4);
-        /*dates = data.getDates();
-        candles = data.getCandles();*/
 
-        setDefaultView();
+        candles = DATA_SERVICE.readListCandles(FILENAME, "dd.MM.yyyy", 5, 0, 4);
+        time = Time.WEEK;
+        currCandles = DATA_SERVICE.groupBy(candles, Calendar.WEEK_OF_MONTH);
 
-        max = DATA_SERVICE.findMaxPrice(currData.getCandles());
-        min = DATA_SERVICE.findMinPrice(currData.getCandles());
-        sc = new ScreenConverter(0, max + 1,
-                currData.getCandles().size() + 1, max - min + 2,
+        max = DATA_SERVICE.findMaxPrice(currCandles);
+        min = DATA_SERVICE.findMinPrice(currCandles);
+
+        sc = new ScreenConverter( 0, max + 1,
+                currCandles.size() + 1, max - min + 2,
                 this.getWidth(), this.getHeight());
 
         this.addMouseListener(this);
@@ -57,11 +56,8 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     {
         sc.setScreenWidth(this.getWidth());
         sc.setScreenHeight(this.getHeight());
-        //sc.setCy(max);
-        //sc.setRealHeight(max - min);
 
         setData();
-
         BufferedImage bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g = bi.createGraphics();
         g.setColor(Color.WHITE);
@@ -69,20 +65,12 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         g.setColor(Color.BLACK);
         g.setStroke(new BasicStroke(2));
 
-        DRAW_SERVICE.drawDiagram(currData, sc, g);
+        DRAW_SERVICE.drawDiagram(currCandles, sc, g);
 
-        DRAW_SERVICE.drawCoordinatePlane(g, 10, this.getHeight()-10, this.getWidth(), this.getHeight());
+        DRAW_SERVICE.drawCoordinatePlane(g, sc);
 
         origG.drawImage(bi, 0, 0, null);
         g.dispose();
-    }
-
-    private void setDefaultView()
-    {
-        //currData = DATA_SERVICE.groupByWeeklist(dates, candles);
-        //data = DATA_SERVICE.groupByWeek(dates, candles);
-        currData = DATA_SERVICE.groupByWeek(data);
-        time = Time.WEEK;
     }
 
     public Time getTime()
@@ -95,22 +83,24 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         this.time = time;
         setData();
         sc.setCx(0);
-        sc.setRealWidth(currData.getCandles().size() + 1);
+        sc.setRealWidth(currCandles.size() + 1);
         repaint();
     }
 
-/*    public void setCurrView()
+    private void groupDataByDay()
     {
-        double realRightestX = sc.screenXtoRealX(sc.getScreenWidth());
-        double realLeftX = sc.screenXtoRealX(0);
-        if (realRightestX < currData.getCandles().size() && realLeftX > 0)
-        {
-            currData.setCandles(currData.getCandles().subList((int)realLeftX, (int)realRightestX-1));
-            max = DATA_SERVICE.findMaxPrice(currData.getCandles());
-            //min = DATA_SERVICE.findMinPrice(currData);
-        }
-    }*/
+        currCandles = candles;
+    }
 
+    private void groupDataByWeek()
+    {
+        currCandles = DATA_SERVICE.groupBy(candles, Calendar.WEEK_OF_MONTH);
+    }
+
+    private void groupDataByMonth()
+    {
+        currCandles = DATA_SERVICE.groupBy(candles, Calendar.MONTH);
+    }
 
     public void setData()
     {
@@ -122,54 +112,11 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         }
     }
 
-
-    private void groupDataByDay()
-    {
-        currData = data;
-    }
-
-    private void groupDataByWeek()
-    {
-        currData = DATA_SERVICE.groupBy(data, Calendar.WEEK_OF_MONTH);
-    }
-
-    private void groupDataByMonth()
-    {
-        currData = DATA_SERVICE.groupBy(data, Calendar.MONTH);
-    }
-  /*  public void setDataByDay()
-    {
-        switch (period)
-        {
-            case WEEK -> setCurrData(data.getWeekData());
-            case MONTH -> setCurrData(data.getMonthData());
-            case YEAR -> setCurrData(data.getData());
-        }
-    }
-
-    public void setDataByWeek()
-    {
-        switch (period)
-        {
-            case MONTH -> setCurrData(DATA_SERVICE.selectDataByWeek(data.getMonthData()));
-            case YEAR -> setCurrData(DATA_SERVICE.selectDataByWeek(data.getData()));
-        }
-    }
-
-    public void setDataByMonth()
-    {
-        if (period == Period.YEAR)
-        {
-            setCurrData(DATA_SERVICE.selectDataByMonth(data.getData()));
-        }
-    }
-*/
-
     private void setDefaultScreenConverter()
     {
         sc.setCx(0);
         sc.setCy(max + 1);
-        sc.setRealWidth(currData.getCandles().size() + 1);
+        sc.setRealWidth(currCandles.size() + 1);
         sc.setRealHeight(max - min + 2);
         sc.setScreenWidth(this.getWidth());
         sc.setScreenHeight(this.getHeight());
@@ -226,18 +173,31 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
             RealPoint p1 = sc.screenToReal(currPoint);
             RealPoint p2 = sc.screenToReal(prevPoint);
             RealPoint delta = p2.minus(p1);
-            if (sc.getCx() + delta.getX() >= 0)
+            int x = sc.realXtoScreenX(sc.getCx() + sc.getRealWidth() + delta.getX());
+
+            if (sc.getCx() + delta.getX() >= 0 && x < sc.getScreenWidth() - 20)
             {
                 sc.moveCornerX(delta);
             }
+
             prevPoint = currPoint;
             //setCurrView();
         }
         repaint();
     }
 
+
+    private int x;
+    private int y;
     @Override
     public void mouseMoved(MouseEvent e)
+    {
+        x = e.getX();
+        y = e.getY();
+        double price = sc.screenXtoRealX(x);
+    }
+
+    private void drawPriceLine(Graphics2D g)
     {
 
     }
@@ -253,8 +213,12 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         {
             scale *= coef;
         }
+
         sc.changeScaleX(scale);
-        //setCurrView();
+
+        double coefChart = sc.getRealWidth() / currCandles.size();
+        List<GregorianCalendar> dates = DATA_SERVICE.toListDates(currCandles);
+
         repaint();
     }
 }
