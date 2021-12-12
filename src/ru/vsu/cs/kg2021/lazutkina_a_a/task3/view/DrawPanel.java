@@ -19,7 +19,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     private static final DrawService DRAW_SERVICE = new DrawService();
     private static final DataService DATA_SERVICE = new DataService();
 
-    private static final String FILENAME = "data/data.txt";
+    private static final String FILENAME = "data/bigdata.txt";
     private final List<Candle> candles;
 
     private Time time;
@@ -175,7 +175,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
             RealPoint delta = p2.minus(p1);
             int x = sc.realXtoScreenX(sc.getCx() + sc.getRealWidth() + delta.getX());
 
-            if (sc.getCx() + delta.getX() >= 0 && x < sc.getScreenWidth() - 20)
+            if (sc.getCx() + delta.getX() >= 0 && sc.getCx() + sc.getRealWidth() + delta.getX() < currCandles.size() + 5)
             {
                 sc.moveCornerX(delta);
             }
@@ -195,11 +195,6 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         x = e.getX();
         y = e.getY();
         double price = sc.screenXtoRealX(x);
-    }
-
-    private void drawPriceLine(Graphics2D g)
-    {
-
     }
 
     private static final double SCALE_STEP = 0.1;
