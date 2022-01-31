@@ -11,7 +11,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 public class DrawPanel extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener {
@@ -19,7 +18,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     private static final DrawService DRAW_SERVICE = new DrawService();
     private static final DataService DATA_SERVICE = new DataService();
 
-    private static final String FILENAME = "data/bigdata.txt";
+    private static final String FILENAME = "data/data.txt";
     private final List<Candle> candles;
 
     private Time time;
@@ -31,8 +30,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     private double min;
 
 
-    public DrawPanel(int width, int height)
-    {
+    public DrawPanel(int width, int height) {
         this.setSize(width, height);
 
         candles = DATA_SERVICE.readListCandles(FILENAME, "dd.MM.yyyy", 5, 0, 4);
@@ -42,8 +40,8 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         max = DATA_SERVICE.findMaxPrice(currCandles);
         min = DATA_SERVICE.findMinPrice(currCandles);
 
-        sc = new ScreenConverter( 0, max + 1,
-                currCandles.size() + 1, max - min + 2,
+        sc = new ScreenConverter(0, max + 1,
+                currCandles.size(), max - min + 3,
                 this.getWidth(), this.getHeight());
 
         this.addMouseListener(this);
@@ -52,8 +50,7 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     }
 
     @Override
-    protected void paintComponent(Graphics origG)
-    {
+    protected void paintComponent(Graphics origG) {
         sc.setScreenWidth(this.getWidth());
         sc.setScreenHeight(this.getHeight());
 
@@ -66,20 +63,18 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         g.setStroke(new BasicStroke(2));
 
         DRAW_SERVICE.drawDiagram(currCandles, sc, g);
-
+        DRAW_SERVICE.drawDates(g, sc, currCandles, time);
         DRAW_SERVICE.drawCoordinatePlane(g, sc);
 
         origG.drawImage(bi, 0, 0, null);
         g.dispose();
     }
 
-    public Time getTime()
-    {
+    public Time getTime() {
         return time;
     }
 
-    public void setTime(Time time)
-    {
+    public void setTime(Time time) {
         this.time = time;
         setData();
         sc.setCx(0);
@@ -87,44 +82,37 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
         repaint();
     }
 
-    private void groupDataByDay()
-    {
+    private void groupDataByDay() {
         currCandles = candles;
     }
 
-    private void groupDataByWeek()
-    {
+    private void groupDataByWeek() {
         currCandles = DATA_SERVICE.groupBy(candles, Calendar.WEEK_OF_MONTH);
     }
 
-    private void groupDataByMonth()
-    {
+    private void groupDataByMonth() {
         currCandles = DATA_SERVICE.groupBy(candles, Calendar.MONTH);
     }
 
-    public void setData()
-    {
-        switch (time)
-        {
+    public void setData() {
+        switch (time) {
             case DAY -> groupDataByDay();
             case WEEK -> groupDataByWeek();
             case MONTH -> groupDataByMonth();
         }
     }
 
-    private void setDefaultScreenConverter()
-    {
+    private void setDefaultScreenConverter() {
         sc.setCx(0);
         sc.setCy(max + 1);
         sc.setRealWidth(currCandles.size() + 1);
-        sc.setRealHeight(max - min + 2);
+        sc.setRealHeight(max - min + 3);
         sc.setScreenWidth(this.getWidth());
         sc.setScreenHeight(this.getHeight());
     }
 
     @Override
-    public void mouseClicked(MouseEvent e)
-    {
+    public void mouseClicked(MouseEvent e) {
         if (e.getClickCount() == 2 && !e.isConsumed() && SwingUtilities.isLeftMouseButton(e)) {
             e.consume();
             setDefaultScreenConverter();
@@ -135,53 +123,43 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
     private ScreenPoint prevPoint = null;
 
     @Override
-    public void mousePressed(MouseEvent e)
-    {
-        if (SwingUtilities.isLeftMouseButton(e))
-        {
+    public void mousePressed(MouseEvent e) {
+        if (SwingUtilities.isLeftMouseButton(e)) {
             prevPoint = new ScreenPoint(e.getX(), e.getY());
         }
     }
 
     @Override
-    public void mouseReleased(MouseEvent e)
-    {
-        if (SwingUtilities.isLeftMouseButton(e))
-        {
+    public void mouseReleased(MouseEvent e) {
+        if (SwingUtilities.isLeftMouseButton(e)) {
             prevPoint = null;
         }
     }
 
     @Override
-    public void mouseEntered(MouseEvent e)
-    {
+    public void mouseEntered(MouseEvent e) {
 
     }
 
     @Override
-    public void mouseExited(MouseEvent e)
-    {
+    public void mouseExited(MouseEvent e) {
 
     }
 
     @Override
-    public void mouseDragged(MouseEvent e)
-    {
-        if (SwingUtilities.isLeftMouseButton(e))
-        {
+    public void mouseDragged(MouseEvent e) {
+        if (SwingUtilities.isLeftMouseButton(e)) {
             ScreenPoint currPoint = new ScreenPoint(e.getX(), e.getY());
             RealPoint p1 = sc.screenToReal(currPoint);
             RealPoint p2 = sc.screenToReal(prevPoint);
             RealPoint delta = p2.minus(p1);
             int x = sc.realXtoScreenX(sc.getCx() + sc.getRealWidth() + delta.getX());
 
-            if (sc.getCx() + delta.getX() >= 0 && sc.getCx() + sc.getRealWidth() + delta.getX() < currCandles.size() + 5)
-            {
+            if (sc.getCx() + delta.getX() >= 0 && sc.getCx() + sc.getRealWidth() + delta.getX() < currCandles.size() + 5) {
                 sc.moveCornerX(delta);
             }
 
             prevPoint = currPoint;
-            //setCurrView();
         }
         repaint();
     }
@@ -189,30 +167,25 @@ public class DrawPanel extends JPanel implements MouseListener, MouseMotionListe
 
     private int x;
     private int y;
+
     @Override
-    public void mouseMoved(MouseEvent e)
-    {
+    public void mouseMoved(MouseEvent e) {
         x = e.getX();
         y = e.getY();
-        double price = sc.screenXtoRealX(x);
     }
 
     private static final double SCALE_STEP = 0.1;
+
     @Override
-    public void mouseWheelMoved(MouseWheelEvent e)
-    {
+    public void mouseWheelMoved(MouseWheelEvent e) {
         int clicks = e.getWheelRotation();
         double scale = 1;
         double coef = 1 + SCALE_STEP * (clicks < 0 ? -1 : 1);
-        for (int i = Math.abs(clicks); i > 0; i--)
-        {
+        for (int i = Math.abs(clicks); i > 0; i--) {
             scale *= coef;
         }
 
         sc.changeScaleX(scale);
-
-        double coefChart = sc.getRealWidth() / currCandles.size();
-        List<GregorianCalendar> dates = DATA_SERVICE.toListDates(currCandles);
 
         repaint();
     }

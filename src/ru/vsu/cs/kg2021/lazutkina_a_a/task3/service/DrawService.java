@@ -5,6 +5,7 @@ import ru.vsu.cs.kg2021.lazutkina_a_a.task3.diagram.*;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Line;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.shapes.Rectangle;
 import ru.vsu.cs.kg2021.lazutkina_a_a.task3.utils.DateUtils;
+import ru.vsu.cs.kg2021.lazutkina_a_a.task3.view.status.Time;
 
 import java.awt.*;
 import java.util.List;
@@ -62,14 +63,10 @@ public class DrawService implements LineDrawer {
         for (int i = x + 1; i < x + sc.getRealWidth(); i++) {
             if (i < candles.size() && i >= 0) {
                 drawCandle(g, sc, candles.get(i), 1, i);
-                /*drawDashX(g, sc, 4, i, sc.getScreenHeight() - 20);*/
-
-                /*drawString(g, sc, i, sc.getScreenHeight() - 4,
-                        DateUtils.toString(candles.get(i).getDate(), "dd.MM.yyyy"));*/
             }
         }
 
-        groupDates(g, sc, candles);
+        //drawDates(g, sc, candles);
 
         DataService ds = new DataService();
         double min = ds.findMinPrice(candles);
@@ -82,36 +79,46 @@ public class DrawService implements LineDrawer {
         }
     }
 
-    private void groupDates(Graphics2D g, ScreenConverter sc, List<Candle> candles)
-    {
-        if (sc.getRealWidth() >= 120)
-        {
-            drawDates(g, sc, candles, "yyyy");
+    public void drawDates(Graphics2D g, ScreenConverter sc, List<Candle> candles, Time currTime) {
+        switch (currTime) {
+            case DAY:
+                if (sc.getRealWidth() >= 120) {
+                    drawDates(g, sc, candles, "yyyy");
+                } else if (sc.getRealWidth() >= 60) {
+                    drawDates(g, sc, candles, "MMM yyyy");
+                } else if (sc.getRealWidth() >= 20) {
+                    drawDates(g, sc, candles, "WW");
+                } else {
+                    drawDates(g, sc, candles, "dd.MM.yyyy");
+                }
+                break;
+            case MONTH:
+                if (sc.getRealWidth() >= 12) {
+                    drawDates(g, sc, candles, "yyyy");
+                } else {
+                    drawDates(g, sc, candles, "MMM yyyy");
+                }
+                break;
+            case WEEK:
+                if (sc.getRealWidth() >= 50) {
+                    drawDates(g, sc, candles, "yyyy");
+                } else if (sc.getRealWidth() >= 20) {
+                    drawDates(g, sc, candles, "MMM yyyy");
+                } else {
+                    drawDates(g, sc, candles, "WW.MM");
+                }
+                break;
         }
-        else if (sc.getRealWidth() >= 60)
-        {
-            drawDates(g, sc, candles, "MMM");
-        }
-        else if (sc.getRealWidth() >= 20)
-        {
-            drawDates(g, sc, candles, "WW");
-        }
-        else
-        {
-            drawDates(g, sc, candles, "dd.MM.yyyy");
-        }
+
 
     }
 
-    private void drawDates(Graphics2D g, ScreenConverter sc, List<Candle> candles, String pattern)
-    {
+    private void drawDates(Graphics2D g, ScreenConverter sc, List<Candle> candles, String pattern) {
         String date = DateUtils.toString(candles.get(0).getDate(), pattern);
         drawString(g, sc, 1, sc.getScreenHeight() - 4, date);
-        for (int i = 0; i < candles.size(); i++)
-        {
+        for (int i = 0; i < candles.size(); i++) {
             String currDate = DateUtils.toString(candles.get(i).getDate(), pattern);
-            if (!currDate.equals(date))
-            {
+            if (!currDate.equals(date)) {
                 date = currDate;
                 drawDashX(g, sc, 4, i, sc.getScreenHeight() - 20);
                 drawString(g, sc, i + 1, sc.getScreenHeight() - 4, date);
