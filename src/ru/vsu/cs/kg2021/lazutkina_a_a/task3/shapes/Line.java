@@ -14,15 +14,7 @@ public class Line {
         return point1;
     }
 
-    public void setPoint1(RealPoint point1) {
-        this.point1 = point1;
-    }
-
     public RealPoint getPoint2() {
         return point2;
-    }
-
-    public void setPoint2(RealPoint point2) {
-        this.point2 = point2;
     }
 }

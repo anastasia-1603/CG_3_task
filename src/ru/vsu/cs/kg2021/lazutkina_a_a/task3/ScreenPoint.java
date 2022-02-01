@@ -20,14 +20,4 @@ public class ScreenPoint
     {
         return row;
     }
-
-    public void setColumn(int column)
-    {
-        this.column = column;
-    }
-
-    public void setRow(int row)
-    {
-        this.row = row;
-    }
 }

@@ -66,8 +66,6 @@ public class DrawService implements LineDrawer {
             }
         }
 
-        //drawDates(g, sc, candles);
-
         DataService ds = new DataService();
         double min = ds.findMinPrice(candles);
         double max = ds.findMaxPrice(candles);

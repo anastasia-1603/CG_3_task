@@ -89,16 +89,6 @@ public class DataService {
         return new Candle(open, high, low, close, date);
     }
 
-    public List<GregorianCalendar> toListDates(List<Candle> candles) {
-        List<GregorianCalendar> dates = new ArrayList<>();
-        candles.sort(Candle::compareTo);
-        for (Candle c: candles) {
-            dates.add(c.getDate());
-        }
-        dates.sort(Calendar::compareTo);
-        return dates;
-    }
-
     /**
      * Читает данные из файла и возвращает список свечей
      *

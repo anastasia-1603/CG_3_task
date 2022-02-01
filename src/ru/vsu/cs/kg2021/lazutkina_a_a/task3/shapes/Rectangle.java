@@ -15,15 +15,7 @@ public class Rectangle {
         return leftUpperPoint;
     }
 
-    public void setLeftUpperPoint(RealPoint leftUpperPoint) {
-        this.leftUpperPoint = leftUpperPoint;
-    }
-
     public RealPoint getRightLowerPoint() {
         return rightLowerPoint;
-    }
-
-    public void setRightLowerPoint(RealPoint rightLowerPoint) {
-        this.rightLowerPoint = rightLowerPoint;
     }
 }
